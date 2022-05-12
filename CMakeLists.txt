@@ -53,12 +53,6 @@ target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore  DD4hep::DDRec fmt::fmt
   )
 
-configure_file(
-	gps.mac
-	share/${PROJECT_NAME}/
-	COPYONLY
-	)
-
 #-----------------------------------------------------------------------------------
 # Install the detector description files.
 install(DIRECTORY compact/
@@ -70,9 +64,6 @@ install(DIRECTORY compact/
     FILES_MATCHING PATTERN "*.xml"
     )
 install(FILES ${PROJECT_NAME}.xml
-    DESTINATION share/${PROJECT_NAME}/
-    )
-install(FILES samplinghcal.xml
     DESTINATION share/${PROJECT_NAME}/
     )
 #-----------------------------------------------------------------------------------

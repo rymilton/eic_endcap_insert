@@ -40,7 +40,7 @@
 
   <includes>
     <gdmlFile ref="compact/elements.xml"/>
-    <gdmlFile ref="compact/materials_zhongling.xml"/>
+    <gdmlFile ref="compact/materials.xml"/>
     <file     ref="compact/optical_materials.xml"/>
   </includes>
 
