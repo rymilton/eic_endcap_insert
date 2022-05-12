@@ -1,8 +1,0 @@
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/install/strip.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/install/local.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/edit_cache.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/Components_athena.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/install.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/list_install_components.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/rebuild_cache.dir
-/home/ryan/eic/eic_endcap_insert/build/CMakeFiles/athena.dir
