@@ -1,0 +1,75 @@
+#!/bin/bash
+
+function print_the_help {
+  echo "USAGE:    --ebeam E --pbeam E -c compact.xml"
+  echo "REQUIRED ARGUMENTS:"
+  echo "          -h|--help     Print this message"
+  echo "          --ebeam       Electron beam energy (5, 10 or 18)"
+  echo "          --pbeam       Ion beam energy (41, 100 or 275)"
+  echo "          -c|--compact  Compact file to set beam energy for"
+  exit
+}
+
+EBEAM=
+PBEAM=
+COMPACT=
+
+while [ $# -gt 0 ]
+do
+  key="$1"
+  case $key in
+    -h|--help)
+      print_the_help
+      ;;
+    --ebeam)
+      EBEAM=$2
+      shift
+      shift
+      ;;
+    --pbeam)
+      PBEAM=$2
+      shift
+      shift
+      ;;
+    -c|--compact)
+      COMPACT=$2
+      shift
+      shift
+      ;;
+    *)    # unknown option
+      echo "unknown option"
+      exit 1
+      ;;
+  esac
+done
+
+echo "Setting beam energies to $EBEAM on $PBEAM for $COMPACT"
+
+if [ -z $COMPACT ]; then
+  echo "Error: no compact file given, use -h for help"
+  exit 1
+fi
+if [ -z $EBEAM ]; then
+  echo "Error: --ebeam argument missing, use -h for help"
+  exit 1
+fi
+if [ -z $PBEAM ]; then
+  echo "Error: --pbeam argument missing, use -h for help"
+  exit 1
+fi
+
+if [[ $PBEAM != "41" &&  $PBEAM != "100" && $PBEAM != "275" ]]; then
+  echo "Error: Ion beam energy should be 41, 100, or 275 GeV"
+  exit 1
+fi
+if [[ $EBEAM != 5 && $EBEAM != 10 && $EBEAM != 18 ]]; then
+  echo "Error: Electron beam energy should be 5, 10, or 18 GeV"
+  exit 1
+fi
+if [ ! -f ${COMPACT} ]; then
+  echo "Error: Compact file ${COMPACT} does not exist"
+  exit 1
+fi
+
+sed -i "s?far_forward_fields_.\{2,3\}.xml?far_forward_fields_${PBEAM}.xml?" athena.xml
+sed -i "s?far_backward_fields_.\{1,2\}.xml?far_backward_fields_${EBEAM}.xml?" athena.xml

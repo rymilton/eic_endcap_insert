@@ -1,0 +1,88 @@
+#!/bin/bash
+set -o nounset
+set -o errexit
+
+PROXY_PROFILE=$USER
+PROXY_PORT=8020
+SSH_HOST="sodium"
+
+function print_the_help {
+  echo "USAGE: ${0} [-p <PROXY_PORT>] [-n <PROFILE_NAME>] [-s SSH_HOST] "
+  echo "  OPTIONS: "
+  echo "       -s,--host      ssh host. Default: sodium"
+  echo "       -p,--port      Proxy port number. Default: 8020"
+  echo "       -n,--profile   Profile name to use. Sets profile directory to ~/.proxy-profiles/PROFILE_NAME"
+  echo " " 
+  echo "  EXAMPLE: " 
+  echo "    ${0} -p 8920 -n sodium sodium  " 
+  exit 
+}
+
+function yes_or_no {
+  while true; do
+    read -p "$* [y/n]: " yn
+    case $yn in
+      [Yy]*) return 0 ;;
+      [Nn]*) echo "No entered" ; return 1 ;;
+    esac
+  done
+}
+if [[ $# -eq 0 ]] ; then
+  print_the_help
+  exit 
+fi
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+    -h|--help)
+      shift # past argument
+      print_the_help
+      exit
+      ;;
+    -p|--port)
+      PROXY_PORT="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -n|--profile)
+      PROXY_PROFILE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -s|--host)
+      SSH_HOST="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    *)    # unknown option
+      #POSITIONAL+=("$1") # save it in an array for later
+      echo "unknown option $1"
+      print_the_help
+      exit
+      shift # past argument
+      ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+#yes_or_no "Upload these plots to logbook HALOG? " && some_command
+
+echo " " 
+echo "ssh -n -D ${PROXY_PORT} ${SSH_HOST}"
+echo " " 
+
+ssh -n -D ${PROXY_PORT} ${SSH_HOST} &
+
+chromium-browser     \
+  --user-data-dir="$HOME/.proxy-profiles/${PROXY_PROFILE}" \
+  --proxy-server="socks5://localhost:${PROXY_PORT}"  &> /dev/null &
+
+echo " " 
+echo "You are now tunneling all traffic through proxy ${SSH_HOST} on port ${PROXY_PORT}"
+echo " " 
+
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+npsim --enableG4GPS \
+  --compact athena.xml \
+  --runType vis \
+  --macro macro/mrich_vis.mac \
+  -O derp.root
+
