@@ -8,7 +8,8 @@
   <documentation level="10">
     ### Ecal configuration
   </documentation>
-  <include ref="ecal_forward_scfi_zhongling.xml"/>
+  <comment> ECal Forward Endcap currently commented out until it incorporates beampie </comment>
+  <!-- <include ref="ecal_forward_scfi_zhongling.xml"/> -->
   <!-- <include ref="ecal_forward_homogenous.xml"/> -->
 
   <include ref="ecal_backward_hybrid.xml"/>

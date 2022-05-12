@@ -40,12 +40,11 @@
     <composite n="19" ref="C"/>
     <composite n="21" ref="H"/>
   </material>
-
-  <!-- <material name="Polystyrene">
-    <D value="1.060" unit="g/cm3"/>
+  <material name="PlasticScint126">
+    <D value="1.06" unit="g/cm3"/>
     <composite n="8" ref="C"/>
     <composite n="8" ref="H"/>
-  </material> -->
+  </material>
   <material name="Steel235">
     <D value="7.85" unit="g/cm3"/>
     <fraction n="0.998" ref="Fe"/>
@@ -210,6 +209,11 @@
     <fraction n="0.954" ref="W"/>
     <fraction n="0.040" ref="Ni"/>
     <fraction n="0.006" ref="Fe"/>
+  </material>
+  <material name="TungstenDens22">
+    <D value="12.72" unit="g / cm3"/>
+    <fraction n="0.97" ref="W"/>
+    <fraction n="0.03" ref="PlasticScint126"/>
   </material>
   <material name="TungstenDens23">
     <D value="17.7" unit="g / cm3"/>
