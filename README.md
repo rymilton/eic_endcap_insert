@@ -1,6 +1,16 @@
 # eic_endcap_insert
-Treat this directory as you would the ATHENA repository (https://eicweb.phy.anl.gov/EIC/detectors/athena.git). Make sure to link the ip6 repository to this one.
 
-The added/edited components are the definitions, materials, ECal, HCal, and insert. The pECal is currently commented out since it needs to be adjusted for the beampipe.
+Running the standalone simulation
+---------------------------------
+Enter the EIC container and source the default enviroment. Then do the following:
 
-Once the ip6 directory is linked, change "CrossingAngle" in ./ip6/ip6_defs.xml to 0 radians to avoid overlaps with the insert/HCal. These will be rotated back once development is finished. 
+```
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$ATHENA_PREFIX -DCMAKE_CXX_STANDARD=17
+make install
+
+cd ..
+./run_sim
+```
+
