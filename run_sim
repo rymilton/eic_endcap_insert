@@ -1,0 +1,6 @@
+#!/bin/bash
+
+npsim  --runType run  --enableG4GPS \
+   --macroFile gps.mac \
+   --compactFile endcapP_insert.xml \
+   --outputFile endcapP_insert_sim.root  || exit
