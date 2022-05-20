@@ -49,7 +49,7 @@
                       EndcapPInsert_PCBThickness">
           <slice 
             name="Absorber_slice"
-            material="Steel235"
+            material="Tungsten"
             thickness="EndcapPInsert_AbsorberThickness"
             vis="AnlGray"/>
           <slice 
