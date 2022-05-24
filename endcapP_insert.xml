@@ -1,5 +1,6 @@
 <lccdd>
   <define>
+    <include ref="ip6/ip6_defs.xml" /> 
     <include ref="compact/definitions.xml" />
 
     <constant name="EndcapPInsert_AbsorberThickness" value="1.764*cm"/>
@@ -23,6 +24,9 @@
   <display>
   <include ref="compact/colors.xml" />
   </display>
+  
+  <comment> Including the central beampipe </comment>
+  <include ref="ip6/beampipe.xml" />
 
   <detectors>
   
