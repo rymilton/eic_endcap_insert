@@ -201,9 +201,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   DetElement   det(detName, detID);  
   Volume motherVol = desc.pickMotherVolume(det);
   
-  // Rotates insert in Y by angle crossing_angle
-  auto tr = Transform3D(RotationY(crossing_angle)) *
-            Transform3D(Position(pos.x(), pos.y(), pos.z() + length/2.));
+  auto tr = Transform3D(Position(pos.x(), pos.y(), pos.z() + length/2.));
 
   PlacedVolume phv = motherVol.placeVolume(envelopeVol, tr);
   phv.addPhysVolID("system", detID);
