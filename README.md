@@ -13,9 +13,5 @@ make install
 cd ..
 ./run_sim
 ```
-To also run the reconstruction software:
-```
-export JUGGLER_SIM_FILE=endcapP_insert_sim.root JUGGLER_REC_FILE=rec_cal_output.edm4hep.root JUGGLER_N_EVENTS=100
-gaudirun.py endcapP_insert_reco.py
-```
+This will run both the detector simulation step and the reconstruction (JUGGLER) step.
 

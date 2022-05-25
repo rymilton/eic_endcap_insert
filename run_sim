@@ -4,3 +4,7 @@ npsim  --runType run  --enableG4GPS \
    --macroFile gps.mac \
    --compactFile endcapP_insert.xml \
    --outputFile endcapP_insert_sim.root  || exit
+
+export JUGGLER_SIM_FILE=endcapP_insert_sim.root JUGGLER_REC_FILE=rec_cal_output.edm4hep.root JUGGLER_N_EVENTS=1000
+gaudirun.py endcapP_insert_reco.py
+
