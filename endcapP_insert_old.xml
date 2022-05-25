@@ -1,0 +1,130 @@
+<lccdd>
+  <define>
+    <include ref="compact/definitions.xml" />
+
+    <constant name="EndcapPInsert_AbsorberThickness" value="1.764*cm"/>
+    <constant name="EndcapPInsert_ScintThickness" value="0.3*cm"/>
+    <constant name="EndcapPInsert_PCBThickness" value="0.236*cm"/>
+    <constant name="Initial_Beampipe_Radius" value="15.*cm"/>
+    <constant name="Final_Beampipe_Radius" value="19.*cm"/>
+  </define>
+
+  <includes>
+    <gdmlFile ref="compact/elements.xml"/>
+    <gdmlFile ref="compact/materials.xml"/>
+  </includes>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  <include ref="compact/colors.xml" />
+  </display>
+
+
+
+  <!--<include ref="ip6/beampipe_hadron_B0.xml" />
+  <include ref="ip6/beampipe.xml" />
+  <include ref="ip6/inner_vacuum_FF_magnets.xml"/>-->
+  
+  <detectors>
+
+  
+    
+  <comment> 
+    These layers currently ignore the air gaps, ESR foil, and scintillator cover. 
+    The absorber is made thicker to accomodate for this. 
+    Layer is 2.3 cm to match HCal layer width w/o air gaps 
+  </comment>
+    <detector
+      id="EndcapPInsert_ID" 
+      name="EndcapPInsert" 
+      type="EndcapPInsert"
+      readout="HcalEndcapPInsertHits">
+        <position x="0" y="0*m" z="EndcapPInsert_zmin"/>
+        <rotation x="0" y="0" z="0"/>
+        <dimensions 
+          x="EndcapPInsert_xtotal"
+          y="EndcapPInsert_ytotal"
+          z="EndcapPInsert_length"/>
+        <layer 
+          repeat="51" 
+          thickness = "EndcapPInsert_AbsorberThickness +
+                      EndcapPInsert_ScintThickness +
+                      EndcapPInsert_PCBThickness">
+          <slice 
+            name="Absorber_slice"
+            material="Tungsten"
+            thickness="EndcapPInsert_AbsorberThickness"
+            vis="AnlGray"/>
+          <slice 
+            name="Scint_slice"
+            material="PlasticScint126"
+            thickness="EndcapPInsert_ScintThickness"
+            vis="AnlOrange"
+            sensitive="true"/>
+          <slice
+            name="PCB_slice"
+            material="Fr4"
+            thickness="EndcapPInsert_PCBThickness"
+            vis="AnlBlue"/>
+        </layer>
+        <beampipe_region 
+          initial_beampipe_radius="Initial_Beampipe_Radius"
+          final_beampipe_radius="Final_Beampipe_Radius"
+          beampipe_crossing_angle="CrossingAngle"/>
+    </detector>
+
+
+    <detector id="9"
+	      name="LeakageDetector"
+	      type="EndcapPInsert"
+	      readout="LeakedHits">
+      <position x="0*m" y="0*m" z="5.2*m"/>
+      <rotation x="0" y="0" z="0"/>
+      <dimensions x="120*cm" y="120*cm" z="103.2*cm"/>
+      <layer repeat="50">
+         <slice name="Scint_slice" material="PlasticScint126" thickness=".30*cm" vis="AnlOrange" sensitive="trye"/>
+        <slice name="Absorber_slice"  material="Tungsten"         thickness="1.764*cm"  vis="AnlGray"/>
+       
+      </layer>
+      <beampipe_region
+          initial_beampipe_radius="0.0*mm"
+          final_beampipe_radius="0.1*mm"
+          beampipe_crossing_angle="CrossingAngle"/>
+    </detector>
+
+
+
+  </detectors>
+
+  <readouts>
+    <readout name="HcalEndcapPInsertHits">
+      <segmentation 
+        type="CartesianGridXY"
+        grid_size_x="3.*cm"
+        grid_size_y="3.*cm"/>
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>  
+    </readout>
+
+   <readout name="LeakedHits">
+     <segmentation type="CartesianGridXY"
+		   grid_size_x="3.0 * cm"
+		   grid_size_y="3.0 * cm"/>
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>
+   </readout>
+
+
+    
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>
