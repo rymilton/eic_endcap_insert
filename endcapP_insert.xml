@@ -2,7 +2,7 @@
   <define>
     <include ref="ip6/ip6_defs.xml" /> 
     <include ref="compact/definitions.xml" />
-    <include ref="compact/free_parameters.xml"/>
+    <include ref="compact/configuration_default.xml"/>
 
     <constant name="EndcapPInsert_AbsorberThickness" value="1.764*cm"/>
     <constant name="EndcapPInsert_ScintThickness" value="0.3*cm"/>
