@@ -21,6 +21,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double     length     = dim.z();
 
   xml_dim_t  pos        = x_det.position();
+  const double     x    = pos.x();
   double     z          = pos.z();
   const double z_front_of_insert = pos.z();
 
@@ -41,11 +42,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     beampipe_region_xml,
     _Unicode(final_beampipe_radius),
     19.*cm
-  );
-  const auto crossing_angle = dd4hep::getAttrOrDefault<double>(
-    beampipe_region_xml,
-    _Unicode(beampipe_crossing_angle),
-    -0.025*radian
   );
 
   // Getting layer dimensions
@@ -80,16 +76,23 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
                    (length - layer_thickness);
     return slope * z_pos + beampipe_radius_initial;
   };
+  Box envelope(width / 2.0, height / 2.0, length / 2.0);
 
-  Box envelope (width/2.0, height/2.0, length/2.0);
-
+  const double initial_hole_x = -x - 7.7 * cm;
   // Cutting out the beampipe shape from the envelope
   for (int ilayer = 0; ilayer < num_layers; ilayer++) 
   {
     const double beampipe_radius = get_beampipe_radius(ilayer*layer_thickness);
     Tube layer_beampipe(0., beampipe_radius, layer_thickness / 2.0);
     /*
-      Position: 
+
+      X-Position: 
+      The hole starts at x = -7.7 cm with respect to global coordinate system.
+      SubtractionSolid Position is with respect to envelope coordinate system.
+      Need to shift back to global with the "-x" in initial_hole_x
+      The hole shifts by -.0569 cm with each layer
+      
+      Z-Position: 
       -length / 2. is front of insert, 
       +ilayer*layer_thickness goes to the front of each layer, 
       +layer_thickness / 2. is the half-length of a layer 
@@ -98,7 +101,11 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     SubtractionSolid envelope_with_insert(
       envelope, 
       layer_beampipe, 
-      Position{0., 0., (-length + layer_thickness) / 2. + ilayer*layer_thickness}
+      Position(
+        initial_hole_x - .0569*ilayer,
+        0., 
+        (-length + layer_thickness) / 2. + ilayer*layer_thickness
+      )
     );
     // Removing the beampipe shape layer by layer
     envelope = envelope_with_insert;
@@ -130,7 +137,11 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
       // Removing beampipe shape from each layer
       Tube layer_beampipe(0., beampipe_radius, layer_thickness / 2.);
-      SubtractionSolid layer_with_insert(layer, layer_beampipe);
+      SubtractionSolid layer_with_insert(
+        layer,
+        layer_beampipe,
+        Position(initial_hole_x-.0569*i, 0., 0.)
+      );
       Volume layer_vol(layer_name, layer_with_insert, Vacuum);
 
       int slice_num = 1;
@@ -150,7 +161,11 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
         // Each slice within a layer has the same cutout radius
         Box slice(width/2.0, height/2.0, slice_thickness/2.0);
         Tube slice_beampipe(0., beampipe_radius, slice_thickness / 2.0);
-        SubtractionSolid slice_with_insert(slice, slice_beampipe);
+        SubtractionSolid slice_with_insert(
+          slice,
+          slice_beampipe,
+          Position(initial_hole_x-.0569*i, 0., 0.)
+        );
         Volume slice_vol (slice_name, slice_with_insert, slice_mat);
         
         if(x_slice.isSensitive()) {
