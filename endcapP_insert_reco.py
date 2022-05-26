@@ -46,13 +46,13 @@ podioevent = EICDataSvc("EventDataSvc", inputs=input_sims)
 from Configurables import Jug__Digi__CalorimeterHitDigi as CalHitDigi
 from Configurables import Jug__Reco__CalorimeterHitReco as CalHitReco
 from Configurables import Jug__Reco__CalorimeterHitsMerger as CalHitsMerger
-from Configurables import Jug__Reco__CalorimeterIslandCluster as IslandCluster
+# from Configurables import Jug__Reco__CalorimeterIslandCluster as IslandCluster
 
-from Configurables import Jug__Reco__ImagingPixelReco as ImCalPixelReco
-from Configurables import Jug__Reco__ImagingTopoCluster as ImagingCluster
+# from Configurables import Jug__Reco__ImagingPixelReco as ImCalPixelReco
+# from Configurables import Jug__Reco__ImagingTopoCluster as ImagingCluster
 
-from Configurables import Jug__Reco__ClusterRecoCoG as RecoCoG
-from Configurables import Jug__Reco__ImagingClusterReco as ImagingClusterReco
+# from Configurables import Jug__Reco__ClusterRecoCoG as RecoCoG
+# from Configurables import Jug__Reco__ImagingClusterReco as ImagingClusterReco
 
 # branches needed from simulation root file
 sim_coll = [
@@ -64,27 +64,6 @@ sim_coll = [
 # input and output
 podin = PodioInput("PodioReader", collections=sim_coll)
 podout = PodioOutput("out", filename=output_rec)
-
-
-# Crystal Endcap Ecal
-# OutputLevel=DEBUG,
-    
-# dimension scaled dist is good for hybrid sectors with different module size
-# Endcap Sampling Ecal
-# merge hits in different layer (projection to local x-y plane)
-        # OutputLevel=DEBUG,
-        # fields=["layer", "slice"],
-        # fieldRefNumbers=[1, 0],
-
-
-# Central Barrel Ecal (Imaging Cal.)
-
-#Central ECAL SciFi
-# use the same daq_setting for digi/reco pair
-        # OutputLevel=DEBUG,
-
-
-# Central Barrel Hcal
 
 
 # Hcal Hadron Endcap
@@ -112,30 +91,15 @@ ci_hcal_merger = CalHitsMerger("ci_hcal_merger",
         fields=["layer", "slice"],
         fieldRefNumbers=[1, 0])
 
-ci_hcal_cl = IslandCluster("ci_hcal_cl",
-        inputHitCollection=ci_hcal_merger.outputHitCollection,
-        outputProtoClusterCollection="HcalEndcapPInsertProtoClusters",
-        splitCluster=False,
-        minClusterCenterEdep=30.*MeV,
-        localDistXY=[15.*cm, 15.*cm])
-
-ci_hcal_clreco = RecoCoG("ci_hcal_clreco",
-        inputProtoClusterCollection=ci_hcal_cl.outputProtoClusterCollection,
-        outputClusterCollection="HcalEndcapPInsertClusters",
-        logWeightBase=6.2)
-
-# Hcal Electron Endcap
+# Hcal Hadron Endcap
 podout.outputCommands = ['drop *',
         'keep MCParticles',
         'keep *Digi',
-        'keep *Reco*',
-        'keep *Cluster*',
-        'keep *Layers']
+        'keep *Reco*']
 
 ApplicationMgr(
     TopAlg = [podin,
-            ci_hcal_digi, ci_hcal_reco, ci_hcal_merger, ci_hcal_cl, ci_hcal_clreco,
-              podout],
+            ci_hcal_digi, ci_hcal_reco, ci_hcal_merger, podout],
     EvtSel = 'NONE',
     EvtMax = n_events,
     ExtSvc = [podioevent],
