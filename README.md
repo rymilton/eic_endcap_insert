@@ -22,3 +22,6 @@ cd ..
 ```
 This will run both the detector simulation step and the reconstruction (JUGGLER) step.
 
+If you want to adjust the particle gun, here's the documentation for the general particle source (GPS):
+Manual: https://www.fe.infn.it/u/paterno/Geant4_tutorial/slides_further/GPS/GPS_manual.pdf
+Examples: https://hurel.hanyang.ac.kr/Geant4/Geant4_GPS/reat.space.qinetiq.com/gps/examples/examples.html
