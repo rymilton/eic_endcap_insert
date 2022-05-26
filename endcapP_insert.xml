@@ -71,6 +71,26 @@
           initial_beampipe_radius="EndcapPInsert_opening_radius"
           final_beampipe_radius="EndcapPInsert_final_radius"/>
     </detector>
+
+
+    <detector id="9"
+              name="LeakageDetector"
+              type="EndcapPInsert"
+              readout="LeakedHits">
+      <position x="0*m" y="0*m" z="5.05*m"/>
+      <rotation x="0" y="0" z="0"/>
+      <dimensions x="120*cm" y="120*cm" z="103.2*cm"/>
+      <layer repeat="50">
+         <slice name="Scint_slice" material="PlasticScint126" thickness=".30*cm" vis="AnlOrange" sensitive="trye"/>
+        <slice name="Absorber_slice"  material="Tungsten"         thickness="1.764*cm"  vis="AnlGray"/>
+
+      </layer>
+      <beampipe_region
+          initial_beampipe_radius="0.0*mm"
+          final_beampipe_radius="0.1*mm"
+          beampipe_crossing_angle="CrossingAngle"/>
+    </detector>
+
   </detectors>
 
   <readouts>
@@ -81,6 +101,17 @@
         grid_size_y="3.*cm"/>
       <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
     </readout>
+
+    <readout name="LeakedHits">
+      <segmentation
+        type="CartesianGridXY"
+        grid_size_x="3.*cm"
+        grid_size_y="3.*cm"/>
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+
+
+    
   </readouts>
 
   <plugins>
