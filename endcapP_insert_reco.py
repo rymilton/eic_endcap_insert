@@ -26,9 +26,10 @@ compact_path = os.path.join(detector_path, detector_name)
 
 # get sampling fractions from system environment variable, 1.0 by default
 #ci_ecal_sf = float(os.environ.get("CI_ECAL_SAMP_FRAC", 0.253))
-cb_hcal_sf = float(os.environ.get("CB_HCAL_SAMP_FRAC", 0.038))
-ci_hcal_sf = float(os.environ.get("CI_HCAL_SAMP_FRAC", 0.025))
-ce_hcal_sf = float(os.environ.get("CE_HCAL_SAMP_FRAC", 0.025))
+#cb_hcal_sf = float(os.environ.get("CB_HCAL_SAMP_FRAC", 0.038))
+#ci_hcal_sf = float(os.environ.get("CI_HCAL_SAMP_FRAC", 0.025))
+#ce_hcal_sf = float(os.environ.get("CE_HCAL_SAMP_FRAC", 0.025))
+ci_hcal_sf = "1."
 
 # input and output
 input_sims = [f.strip() for f in str.split(os.environ["JUGGLER_SIM_FILE"], ",") if f.strip()]
@@ -100,7 +101,7 @@ ci_hcal_digi = CalHitDigi("ci_hcal_digi",
 ci_hcal_reco = CalHitReco("ci_hcal_reco",
         inputHitCollection=ci_hcal_digi.outputHitCollection,
         outputHitCollection="HcalEndcapPInsertHitsReco",
-        thresholdFactor=5.0,
+        thresholdFactor=0.0,
         samplingFraction=ci_hcal_sf,
         **ci_hcal_daq)
 
