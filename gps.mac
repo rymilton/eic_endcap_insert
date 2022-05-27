@@ -11,10 +11,17 @@
 
 /gps/pos/type Volume
 /gps/pos/shape Cylinder
+<<<<<<< HEAD
 /gps/pos/centre -10. 0.0 0. cm
 /gps/pos/radius 0.01 cm
 /gps/pos/halfz  10 cm
 
+=======
+/gps/pos/centre -10. 0.0 0.0 cm
+/gps/pos/radius 0.01 cm
+/gps/pos/halfz  10 cm
+ 
+>>>>>>> a5778fac8185b943c71fc94c3635b81c0c554f9b
 /gps/ang/type iso
 /gps/ang/mintheta 177.17 degree
 /gps/ang/maxtheta 177.17 degree
