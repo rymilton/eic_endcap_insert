@@ -7,7 +7,6 @@
 
 /gps/ene/type Gauss
 /gps/ene/mono 50 GeV
-/gps/ene/sigma 1 GeV
 
 /gps/pos/type Volume
 /gps/pos/shape Cylinder
