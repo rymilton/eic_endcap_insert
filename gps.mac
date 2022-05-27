@@ -6,19 +6,19 @@
 /gps/number 1
 
 /gps/ene/type Gauss
-/gps/ene/mono  10.0 GeV
-/gps/ene/sigma 1.0 GeV
+/gps/ene/mono 50 GeV
+/gps/ene/sigma 1 GeV
 
 /gps/pos/type Volume
 /gps/pos/shape Cylinder
-/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/pos/centre -10. 0.0 0. cm
 /gps/pos/radius 0.01 cm
 /gps/pos/halfz  10 cm
-/gps/position 0 0 0 cm
 
-#/gps/direction 0 0.1 1.0 
 /gps/ang/type iso
-/gps/ang/mintheta 170 degree
-/gps/ang/maxtheta 179.9 degree
+/gps/ang/mintheta 177.17 degree
+/gps/ang/maxtheta 177.17 degree
+/gps/ang/minphi 0 degree
+/gps/ang/maxphi 360 degree
 
 /run/beamOn 1000
