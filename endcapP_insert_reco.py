@@ -68,7 +68,7 @@ podout = PodioOutput("out", filename=output_rec)
 
 # Hcal Hadron Endcap
 ci_hcal_daq = dict(
-         dynamicRangeADC=50.*MeV,
+         dynamicRangeADC=200.*MeV,
          capacityADC=32768,
          pedestalMean=400,
          pedestalSigma=10)
