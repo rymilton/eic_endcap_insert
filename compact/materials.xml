@@ -391,5 +391,16 @@
     <D type="density" value="12.4" unit="g / cm3"/>
     <fraction n="0.96" ref="W"/>
     <fraction n="0.04" ref="Polystyrene"/>
-  </material>  
+  </material>
+
+
+  
+  <material name="Polystyrole" state="solid">
+  <MEE unit="eV" value="68.7"/>
+  <D unit="g/cm3" value="1.06"/>
+  <fraction n="0.077418" ref="H"/>
+  <fraction n="0.922582" ref="C"/>
+</material>
+
+  
 </materials>

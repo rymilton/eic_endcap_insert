@@ -4,9 +4,11 @@
     <include ref="compact/definitions.xml" />
     <include ref="compact/configuration_default.xml"/>
 
-    <constant name="EndcapPInsert_AbsorberThickness" value="1.764*cm"/>
-    <constant name="EndcapPInsert_ScintThickness" value="0.3*cm"/>
-    <constant name="EndcapPInsert_PCBThickness" value="0.236*cm"/>
+    <constant name="EndcapPInsert_AirThickness"      value="0.02*cm"/>
+    <constant name="EndcapPInsert_AbsorberThickness" value="1.61*cm"/>
+    <constant name="EndcapPInsert_ScintThickness"    value="0.30*cm"/>
+    <constant name="EndcapPInsert_PCBThickness"      value="0.16*cm"/>
+    <constant name="EndcapPInsert_ESRThickness"      value="0.015*cm"/>
   </define>
 
   <includes>
@@ -30,9 +32,7 @@
   <detectors>
   
   <comment> 
-    These layers currently ignore the air gaps, ESR foil, and scintillator cover. 
-    The absorber is made thicker to accomodate for this. 
-    Layer is 2.3 cm to match HCal layer width w/o air gaps 
+    These layers currently ignore the ESR foil, and scintillator cover. 
   </comment>
     <detector
       id="EndcapPInsert_ID" 
@@ -47,25 +47,51 @@
           z="EndcapPInsert_length"/>
         <layer 
           repeat="EndcapPInsert_numLayers" 
-          thickness = "EndcapPInsert_AbsorberThickness +
-                      EndcapPInsert_ScintThickness +
-                      EndcapPInsert_PCBThickness">
-          <slice 
+          thickness = "EndcapPInsert_AirThickness + 
+                       EndcapPInsert_AbsorberThickness +
+                       EndcapPInsert_ESRThickness + 
+                       EndcapPInsert_ScintThickness +
+                       EndcapPInsert_ESRThickness + 
+                       EndcapPInsert_PCBThickness +
+                       EndcapPInsert_AirThickness ">
+
+
+	  <slice 
             name="Absorber_slice"
             material="Tungsten"
             thickness="EndcapPInsert_AbsorberThickness"
+            radiator="yes" 
             vis="AnlGray"/>
+	  <slice
+            name="Air_slice"
+            material="Air"
+            thickness="EndcapPInsert_AirThickness"
+	    vis="Invisible"/>
+	  <slice
+	      name="ESRfoil_slice"
+	      materials="Polystyrole"
+	      thickness="EndcapPInsert_ESRThickness"
+	      vis="Invisible" /> 
           <slice 
             name="Scint_slice"
             material="PlasticScint126"
             thickness="EndcapPInsert_ScintThickness"
             vis="AnlOrange"
             sensitive="true"/>
+	  <slice
+              name="ESRfoil_slice"
+              materials="Polystyrole"
+              thickness="EndcapPInsert_ESRThickness"
+              vis="Invisible" />
           <slice
             name="PCB_slice"
             material="Fr4"
             thickness="EndcapPInsert_PCBThickness"
             vis="AnlBlue"/>
+	  <slice
+	    name="Air_slice"
+	    material="Air"
+	    thickness="EndcapPInsert_AirThickness"/>
         </layer>
         <beampipe_region 
           initial_beampipe_radius="EndcapPInsert_opening_radius"
@@ -81,8 +107,8 @@
       <rotation x="0" y="0" z="0"/>
       <dimensions x="120*cm" y="120*cm" z="103.2*cm"/>
       <layer repeat="50">
-         <slice name="Scint_slice" material="PlasticScint126" thickness=".30*cm" vis="AnlOrange" sensitive="trye"/>
-        <slice name="Absorber_slice"  material="Tungsten"         thickness="1.764*cm"  vis="AnlGray"/>
+         <slice name="Scint_slice" material="PlasticScint126" thickness="EndcapPInsert_ScintThickness" vis="AnlOrange" sensitive="trye"/>
+        <slice name="Absorber_slice"  material="Tungsten"         thickness="EndcapPInsert_AbsorberThickness"  vis="AnlGray"/>
 
       </layer>
       <beampipe_region
