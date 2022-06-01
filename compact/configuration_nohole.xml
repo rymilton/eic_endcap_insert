@@ -9,6 +9,6 @@
     <constant name="EndcapPInsert_xtotal"   value="59.6*cm"/>
     <constant name="EndcapPInsert_ytotal"   value="59.7485*cm"/>
     <constant name="EndcapPInsert_numLayers"   value="51"/>
-    <constant name="EndcapPInsert_opening_radius" value="0.001*cm"/>
-    <constant name="EndcapPInsert_final_radius" value="0.001*cm"/>
+    <constant name="EndcapPInsert_opening_radius" value="0.00001*cm"/>
+    <constant name="EndcapPInsert_final_radius" value="0.00001*cm"/>
   </define>
