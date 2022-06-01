@@ -80,7 +80,13 @@ void gen_particles(
             sqrt(p*p + (mass * mass))),
         pdgID, 1);
 
-    GenVertexPtr v1 = std::make_shared<GenVertex>();
+    //If wanted, set non-zero vertex
+    double vx = 0.;
+    double vy = 0.;
+    double vz = 0.;
+    double time = 0.;
+
+    GenVertexPtr v1 = std::make_shared<GenVertex>(FourVector(vx,vy,vz,time));
     v1->add_particle_in(p1);
     v1->add_particle_in(p2);
 
