@@ -25,12 +25,11 @@ using namespace HepMC3;
 void gen_particles(
                     int n_events = 1000, 
                     const char* out_fname = "gen_particles.hepmc", 
-                    TString particle_name = "e-"
+                    TString particle_name = "e-",
+                    double th_deg = 3., // Polar angle, in degrees
+                    double p = 10.  // Momentum in GeV/c
                   )
-{
-  double th_deg = 3; // Polar angle, in degrees
-  double p = 10;     // Momentum in GeV/c
-
+{ 
   WriterAscii hepmc_output(out_fname);
   int events_parsed = 0;
   GenEvent evt(Units::GEV, Units::MM);
