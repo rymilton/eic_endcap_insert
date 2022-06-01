@@ -11,7 +11,7 @@
   <detectors>
 
   <detector
-      id="BeamOrbitTracker_station_1_ID"
+      id="ForwardBeamOrbitTracker_station_1_ID"
       name="BeamOrbitTracker_station_1"
       readout="BeamOrbitHits"
       type="ip6_OffMomentumTracker"
@@ -32,7 +32,7 @@
 
     
   <detector
-      id="BeamOrbitTracker_station_2_ID"
+      id="ForwardBeamOrbitTracker_station_2_ID"
       name="BeamOrbitTracker_station_2"
       readout="BeamOrbitHits"
       type="ip6_OffMomentumTracker"
