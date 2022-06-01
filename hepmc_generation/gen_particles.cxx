@@ -11,22 +11,25 @@
 #include <cmath>
 #include <math.h>
 #include <TMath.h>
+#include <TDatabasePDG.h>
+#include <TParticlePDG.h>
 
 using namespace HepMC3;
 
-//Generate single electron as input to the Insert simulation.
-//--
-//We generate events with a constant polar angle with respect to
-//the proton direction and then rotate so that the events are given
-//in normal lab coordinate system
-//--
-void gen_electrons(int n_events = 1000, 
-                     const char* out_fname = "gen_electrons.hepmc")
+// Generate single electron as input to the Insert simulation.
+// --
+// We generate events with a constant polar angle with respect to
+// the proton direction and then rotate so that the events are given
+// in normal lab coordinate system
+// --
+void gen_particles(
+                    int n_events = 1000, 
+                    const char* out_fname = "gen_particles.hepmc", 
+                    TString particle_name = "e-"
+                  )
 {
-
-  //Generated values
-  double th_deg = 3; //Polar angle, in degrees
-  double p = 10; //Momentum, in GeV/c
+  double th_deg = 3; // Polar angle, in degrees
+  double p = 10;     // Momentum in GeV/c
 
   WriterAscii hepmc_output(out_fname);
   int events_parsed = 0;
@@ -34,6 +37,12 @@ void gen_electrons(int n_events = 1000,
 
   // Random number generator
   TRandom3 *r1 = new TRandom3(0); //Use time as random seed
+  
+  // Getting generated particle information
+  TDatabasePDG *pdg = new TDatabasePDG();
+  TParticlePDG *particle = pdg->GetParticle(particle_name);
+  const double mass = particle->Mass();
+  const int pdgID = particle->PdgCode();
 
   for (events_parsed = 0; events_parsed < n_events; events_parsed++) {
 
@@ -68,8 +77,8 @@ void gen_electrons(int n_events = 1000,
     GenParticlePtr p3 = std::make_shared<GenParticle>(
         FourVector(
             pvec.X(), pvec.Y(), pvec.Z(),
-            sqrt(p*p + (0.000511 * 0.000511))),
-        11, 1);
+            sqrt(p*p + (mass * mass))),
+        pdgID, 1);
 
     GenVertexPtr v1 = std::make_shared<GenVertex>();
     v1->add_particle_in(p1);
@@ -84,7 +93,7 @@ void gen_electrons(int n_events = 1000,
     }
 
     hepmc_output.write_event(evt);
-    if (events_parsed % 10000 == 0) {
+    if (events_parsed % 100 == 0) {
       std::cout << "Event: " << events_parsed << std::endl;
     }
     evt.clear();
