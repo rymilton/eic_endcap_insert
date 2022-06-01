@@ -2,7 +2,7 @@
 
 # Input simulation parameters
 particle="pi-"
-beam_energy=1
+beam_energy=50
 num_events=1000
 theta_low=177.17
 theta_high=177.17
