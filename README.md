@@ -4,9 +4,14 @@ Running the standalone simulation
 ---------------------------------
 Enter the EIC container and source the default enviroment. Then do the following:
 
-First, get the ip6 files:
+If you don't have them already, get the latest ip6 files and install them:
 ```
 git clone https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
+cd ip6
+mkdir build && cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$ATHENA_PREFIX -DCMAKE_CXX_STANDARD=17
+make install
+cd ../..
 ```
 Then clone this repository and install it:
 ```
