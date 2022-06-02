@@ -8,5 +8,5 @@ for energy in "${energies[@]}"
 do
 	sed -i "s/beam_energy=.*/beam_energy=${energy}/" ${simulation}
 	echo "Starting energy ${energy} GeV"
-	time source ${simulation}
+	time ./${simulation}
 done
