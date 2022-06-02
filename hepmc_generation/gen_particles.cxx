@@ -84,7 +84,8 @@ void gen_particles(
     double vz = 0.;
     double vt = 0.;
 
-    GenVertexPtr v1 = std::make_shared<GenVertex>(FourVector(vx,vy,vz,vt));
+    GenVertexPtr v1 = std::make_shared<GenVertex>();
+    evt.shift_position_by(FourVector(vx, vy, vz, vt));
     v1->add_particle_in(p1);
     v1->add_particle_in(p2);
 
