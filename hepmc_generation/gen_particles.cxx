@@ -69,8 +69,7 @@ void gen_particles(
     //Rotate to lab coordinate system
     double cross_angle = -25./1000.; //in Rad
     TVector3 pbeam_dir(sin(cross_angle),0,cos(cross_angle)); //proton beam direction
-    pvec.RotateY(pbeam_dir.Theta()); //Theta is returned positive, beam in negative X
-
+    pvec.RotateY(-pbeam_dir.Theta()); // Theta is returned positive, beam in negative X
     // type 1 is final state
     // pdgid 11 - electron 0.510 MeV/c^2
     GenParticlePtr p3 = std::make_shared<GenParticle>(
