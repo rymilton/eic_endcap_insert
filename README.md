@@ -23,9 +23,10 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$ATHENA_PREFIX -DCMAKE_CXX_STANDARD=17
 make install
 
 cd ..
-./run_sim
+./run_sim_hepmc
 ```
 This will run both the detector simulation step and the reconstruction (JUGGLER) step.
+You can either use ./run_sim_hepmc or ./run_sim_gps, depending on if you want a hepmc generator or the general particle source.
 
 ## GPS documentation
 ---------------------------------
