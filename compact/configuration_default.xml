@@ -2,9 +2,8 @@
     <documentation>
       ## Default insert configuration for angled beampipe
     </documentation>
-    <constant name="EndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
+    <constant name="EndcapPInsert_zmin"     value="380*cm"/>
     <constant name="EndcapPInsert_xpos"     value="-10*cm"/>
-    <constant name="EndcapPInsert_length"   value="HcalEndcapP_length"/>
     <constant name="EndcapPInsert_xtotal"   value="59.6*cm"/>
     <constant name="EndcapPInsert_ytotal"   value="59.7485*cm"/>
     <constant name="EndcapPInsert_numLayers"   value="51"/>
