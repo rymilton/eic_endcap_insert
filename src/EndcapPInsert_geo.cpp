@@ -49,12 +49,12 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   const auto num_layers = dd4hep::getAttrOrDefault<double>(
     layer_xml,
     _Unicode(repeat),
-    60
+    51
   );
   const auto layer_thickness = dd4hep::getAttrOrDefault<double>(
     layer_xml,
     _Unicode(thickness),
-    2.3*cm
+    2.34*cm
   );
 
   // Function that returns a linearly interpolated beampipe radius at a given z 
@@ -78,6 +78,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   };
   Box envelope(width / 2.0, height / 2.0, length / 2.0);
 
+  // Hole x-position in insert coordinate system
   const double initial_hole_x = -x - 7.7 * cm;
   // Cutting out the beampipe shape from the envelope
   for (int ilayer = 0; ilayer < num_layers; ilayer++) 
