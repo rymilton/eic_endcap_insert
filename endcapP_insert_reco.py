@@ -54,6 +54,8 @@ from Configurables import Jug__Reco__CalorimeterHitsMerger as CalHitsMerger
 # from Configurables import Jug__Reco__ClusterRecoCoG as RecoCoG
 # from Configurables import Jug__Reco__ImagingClusterReco as ImagingClusterReco
 
+from Configurables import Jug__Fast__InclusiveKinematicsTruth as InclusiveKinematicsTruth
+
 # branches needed from simulation root file
 sim_coll = [
     "MCParticles",
@@ -64,7 +66,6 @@ sim_coll = [
 # input and output
 podin = PodioInput("PodioReader", collections=sim_coll)
 podout = PodioOutput("out", filename=output_rec)
-
 
 # Hcal Hadron Endcap
 ci_hcal_daq = dict(
@@ -91,15 +92,24 @@ ci_hcal_merger = CalHitsMerger("ci_hcal_merger",
         fields=["layer", "slice"],
         fieldRefNumbers=[1, 0])
 
-# Hcal Hadron Endcap
+# Truth level kinematics
+truth_incl_kin = InclusiveKinematicsTruth("truth_incl_kin",
+        inputMCParticles = "MCParticles",
+        outputInclusiveKinematics = "InclusiveKinematicsTruth"
+)
+
+
+# Output
 podout.outputCommands = ['drop *',
         'keep MCParticles',
         'keep *Digi',
-        'keep *Reco*']
+        'keep *Reco*',
+	'keep Inclusive*']
 
 ApplicationMgr(
     TopAlg = [podin,
-            ci_hcal_digi, ci_hcal_reco, ci_hcal_merger, podout],
+            ci_hcal_digi, ci_hcal_reco, ci_hcal_merger, 
+	    truth_incl_kin, podout],
     EvtSel = 'NONE',
     EvtMax = n_events,
     ExtSvc = [podioevent],
