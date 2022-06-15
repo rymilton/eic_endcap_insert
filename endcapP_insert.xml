@@ -3,24 +3,6 @@
     <include ref="ip6/definitions.xml" /> 
     <include ref="compact/definitions.xml" />
     <include ref="compact/configuration_default.xml"/>
-
-    <constant name="EndcapPInsert_AirThickness"      value="0.02*cm"/>
-    <constant name="EndcapPInsert_AbsorberThickness" value="1.61*cm"/>
-    <constant name="EndcapPInsert_ScintCoverThickness" value="0.2*cm"/>
-    <constant name="EndcapPInsert_ScintThickness"    value="0.30*cm"/>
-    <constant name="EndcapPInsert_PCBThickness"      value="0.16*cm"/>
-    <constant name="EndcapPInsert_ESRThickness"      value="0.015*cm"/>
-    
-    <constant name="EndcapPInsert_LayerThickness" 
-      value="EndcapPInsert_AirThickness +
-             EndcapPInsert_AbsorberThickness +
-             EndcapPInsert_ESRThickness +
-             EndcapPInsert_ScintCoverThickness + 
-             EndcapPInsert_ScintThickness +
-             EndcapPInsert_ESRThickness +
-             EndcapPInsert_PCBThickness +
-             EndcapPInsert_AirThickness "
-    />
   </define>
 
   <includes>
@@ -41,141 +23,15 @@
   <comment> Including the central beampipe </comment>
   <include ref="ip6/central_beampipe.xml" />
 
+  <comment> Including the pEndcap insert </comment>
+  <include ref="compact/pECalInsert.xml"/>
+  <include ref="compact/pHCalInsert.xml"/>
+  <include ref="compact/leakage_detector.xml"/>
+
   <detectors>
-
-    <comment>
-      The total insert length is modeled as 119.34 cm here.
-      The design will actually be 118.61 cm.
-      The final layer in this model is 1.61 cm absorber, 0.73 cm vacuum.
-      So only 118.61 cm of non-vacuum material is present.
-    </comment>
-    <detector
-      id="EndcapPInsert_ID" 
-      name="EndcapPInsert" 
-      type="EndcapPInsert"
-      readout="HcalEndcapPInsertHits"
-    >
-      <position x="EndcapPInsert_xpos" y="0*m" z="EndcapPInsert_zmin"/>
-      <rotation x="0" y="0" z="0"/>
-      <dimensions 
-        x="EndcapPInsert_xtotal"
-        y="EndcapPInsert_ytotal"
-        z="EndcapPInsert_LayerThickness*EndcapPInsert_numLayers"
-      />
-      <layer 
-        repeat="EndcapPInsert_numLayers" 
-        thickness = "EndcapPInsert_LayerThickness"
-      >
-        <slice 
-          name="Absorber_slice"
-          material="Tungsten"
-          thickness="EndcapPInsert_AbsorberThickness"
-          radiator="yes" 
-          vis="AnlGray"
-        />
-        <slice
-          name="Air_slice"
-          material="Air"
-          thickness="EndcapPInsert_AirThickness"
-          vis="Invisible"
-        />
-        <slice
-          name="ESRfoil_slice"
-          material="Polystyrole"
-          thickness="EndcapPInsert_ESRThickness"
-          vis="Invisible"
-        /> 
-        <slice
-          name="ScintCover_slice"
-          material="Aluminum"
-          thickness="EndcapPInsert_ScintCoverThickness"
-          vis="Invisible"
-        /> 
-        <slice 
-          name="Scint_slice"
-          material="PlasticScint126"
-          thickness="EndcapPInsert_ScintThickness"
-          vis="AnlOrange"
-          sensitive="true"
-        />
-        <slice
-          name="ESRfoil_slice"
-          material="Polystyrole"
-          thickness="EndcapPInsert_ESRThickness"
-          vis="Invisible"
-        />
-        <slice
-          name="PCB_slice"
-          material="Fr4"
-          thickness="EndcapPInsert_PCBThickness"
-          vis="AnlBlue"
-        />
-        <slice
-          name="Air_slice"
-          material="Air"
-          thickness="EndcapPInsert_AirThickness"
-        />
-      </layer>
-      <beampipe_region 
-        initial_beampipe_radius="EndcapPInsert_opening_radius"
-        final_beampipe_radius="EndcapPInsert_final_radius"
-      />
-    </detector>
-
-
-    <detector id="9"
-              name="LeakageDetector"
-              type="EndcapPInsert"
-              readout="LeakedHits"
-    >
-      <position x="0*m" y="0*m" z="5.05*m"/>
-      <rotation x="0" y="0" z="0"/>
-      <dimensions x="120*cm" y="120*cm" z="95.5*cm"/>
-      <layer 
-        repeat="50"
-        thickness = "EndcapPInsert_AbsorberThickness +
-                     EndcapPInsert_ScintThickness "
-      >
-        <slice 
-          name="Absorber_slice"
-          material="Tungsten"
-          thickness="EndcapPInsert_AbsorberThickness"
-          vis="AnlGray"
-        />
-        <slice 
-          name="Scint_slice"
-          material="PlasticScint126"
-          thickness="EndcapPInsert_ScintThickness"
-          vis="AnlOrange"
-          sensitive="true"
-        />
-      </layer>
-      <beampipe_region
-          initial_beampipe_radius="0.00001*cm"
-          final_beampipe_radius="0.00001*cm"
-      />
-    </detector>
-
   </detectors>
 
   <readouts>
-    <readout name="HcalEndcapPInsertHits">
-      <segmentation 
-        type="CartesianGridXY"
-        grid_size_x="3.*cm"
-        grid_size_y="3.*cm"
-      />
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
-    </readout>
-
-    <readout name="LeakedHits">
-      <segmentation
-        type="CartesianGridXY"
-        grid_size_x="3.*cm"
-        grid_size_y="3.*cm"
-      />
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
-    </readout>
   </readouts>
 
   <plugins>
