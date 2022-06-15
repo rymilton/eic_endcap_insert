@@ -1,7 +1,5 @@
 <lccdd>
   <define>
-
-
     <comment> HCal insert thicknesses </comment>
     <constant name="pHCalInsert_AirThickness"      value="0.02*cm"/>
     <constant name="pHCalInsert_AbsorberThickness" value="1.61*cm"/>
@@ -20,8 +18,6 @@
              pHCalInsert_PCBThickness +
              pHCalInsert_AirThickness "
     />
-
-
   </define>
 
   <limits>
