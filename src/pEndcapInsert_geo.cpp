@@ -56,8 +56,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     _Unicode(thickness),
     2.34*cm
   );
-
-  // Function that returns a linearly interpolated beampipe radius at a given z 
+  
+  // Function that returns a linearly interpolated beampipe radius at a given z
   auto get_beampipe_radius = [
     beampipe_radius_initial, 
     beampipe_radius_final, 
@@ -72,8 +72,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       The radius is beampipe_radius_final at the beginning of the last layer, 
         i.e. z = length-layer_thickness
     */
-    double slope = (beampipe_radius_final - beampipe_radius_initial) / 
-                   (length - layer_thickness);
+    double slope = (beampipe_radius_final != beampipe_radius_initial) ? 
+                    (beampipe_radius_final - beampipe_radius_initial) /
+                    (length - layer_thickness) : 
+                    0.;
     return slope * z_pos + beampipe_radius_initial;
   };
   Box envelope(width / 2.0, height / 2.0, length / 2.0);
@@ -87,16 +89,16 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     Tube layer_beampipe(0., beampipe_radius, layer_thickness / 2.0);
     /*
 
-      X-Position: 
+      X-Position:
       The hole starts at x = -7.7 cm with respect to global coordinate system.
       SubtractionSolid Position is with respect to envelope coordinate system.
       Need to shift back to global with the "-x" in initial_hole_x
       The hole shifts by -.0569 cm with each layer
-      
-      Z-Position: 
-      -length / 2. is front of insert, 
-      +ilayer*layer_thickness goes to the front of each layer, 
-      +layer_thickness / 2. is the half-length of a layer 
+
+      Z-Position:
+      -length / 2. is front of insert,
+      +ilayer*layer_thickness goes to the front of each layer,
+      +layer_thickness / 2. is the half-length of a layer
         (i.e. where to put the cutout shape)
     */
     SubtractionSolid envelope_with_insert(
@@ -151,7 +153,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
         // Want the final layer to only have an absorber slice
         // Assumes first slice of a layer is always absorber 
-        if(layer_num == repeat && slice_num > 1)
+        if(layer_num == repeat && slice_num > 1 && detName!="pECalInsert")
           break;
 
         xml_comp_t x_slice = l;
@@ -225,4 +227,4 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   return det;
 }
-DECLARE_DETELEMENT(EndcapPInsert, createDetector)
+DECLARE_DETELEMENT(pEndcapInsert, createDetector)
