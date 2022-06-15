@@ -2,11 +2,19 @@
     <documentation>
       ## Default insert configuration for angled beampipe
     </documentation>
-    <constant name="EndcapPInsert_zmin"     value="380*cm"/>
-    <constant name="EndcapPInsert_xpos"     value="-10*cm"/>
-    <constant name="EndcapPInsert_xtotal"   value="59.6*cm"/>
-    <constant name="EndcapPInsert_ytotal"   value="59.7485*cm"/>
-    <constant name="EndcapPInsert_numLayers"   value="51"/>
-    <constant name="EndcapPInsert_opening_radius" value="15.*cm"/>
-    <constant name="EndcapPInsert_final_radius" value="17.25*cm"/>
+    <constant name="pHCalInsert_zmin"     value="380*cm"/>
+    <constant name="pHCalInsert_xpos"     value="-10*cm"/>
+    <constant name="pHCalInsert_xtotal"   value="59.6*cm"/>
+    <constant name="pHCalInsert_ytotal"   value="59.7485*cm"/>
+    <constant name="pHCalInsert_numLayers"   value="51"/>
+    <constant name="pHCalInsert_opening_radius" value="15.*cm"/>
+    <constant name="pHCalInsert_final_radius" value="17.25*cm"/>
+
+    <constant name="pECalInsert_zmin"     value="350*cm"/>
+    <constant name="pECalInsert_xpos"     value="-10*cm"/>
+    <constant name="pECalInsert_xtotal"   value="60.*cm"/>
+    <constant name="pECalInsert_ytotal"   value="60.*cm"/>
+    <constant name="pECalInsert_numLayers"   value="1"/>
+    <constant name="pECalInsert_opening_radius" value="15.*cm"/>
+    <constant name="pECalInsert_final_radius" value="15.*cm"/>
   </define>

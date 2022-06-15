@@ -1,0 +1,106 @@
+<lccdd>
+  <define>
+    <comment> ECal insert thicknesses </comment>
+    <constant name="pECalInsert_CoverThickness"            value="0.1*cm"/>
+    <constant name="pECalInsert_AirThickness"              value="10.15*cm"/>
+    <constant name="pECalInsert_PCBThickness"              value="0.25*cm"/>
+    <constant name="pECalInsert_LightGuideThickness"       value="2.5*cm"/>
+    <constant name="pECalInsert_ScintillatorThickness"     value="17.*cm"/>
+
+    <constant name="pECalInsert_LayerThickness"
+      value = "pECalInsert_CoverThickness +
+               pECalInsert_AirThickness +
+               pECalInsert_PCBThickness +
+               pECalInsert_LightGuideThickness +
+               pECalInsert_ScintillatorThickness "
+    />
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+    <comment>
+      pECal insert
+      -----------
+    </comment>
+    <detector
+      id="pECalInsert_ID" 
+      name="pECalInsert" 
+      type="pEndcapInsert"
+      readout="EcalEndcapPInsertHits"
+    >
+      <position x="pECalInsert_xpos" y="0*m" z="pECalInsert_zmin"/>
+      <rotation x="0" y="0" z="0"/>
+      <dimensions 
+        x="pECalInsert_xtotal"
+        y="pECalInsert_ytotal"
+        z="pECalInsert_LayerThickness*pECalInsert_numLayers"
+      />
+      <layer 
+        repeat="pECalInsert_numLayers" 
+        thickness = "pECalInsert_LayerThickness"
+      >
+        <slice 
+          name="Cover_slice"
+          material="Aluminum"
+          thickness="pECalInsert_CoverThickness"
+          vis="AnlGray"
+        />
+        <slice 
+          name="Air_slice"
+          material="Air"
+          thickness="pECalInsert_AirThickness"
+          vis="AnlGray"
+        />
+        <slice 
+          name="PCB_slice"
+          material="Fr4"
+          thickness="pECalInsert_PCBThickness"
+          vis="AnlGray"
+        />
+        <slice
+          name="LightGuide_slice"
+          material="Plexiglass"
+          thickness="pECalInsert_LightGuideThickness"
+          vis="AnlBlue"
+        />
+        <slice
+          name="Scintillator_slice"
+          material="WSciFi_UCLA_Abs"
+          thickness="pECalInsert_ScintillatorThickness"
+          vis="AnlOrange"
+          sensitive="true"
+        /> 
+      </layer>
+      <beampipe_region 
+        initial_beampipe_radius="pECalInsert_opening_radius"
+        final_beampipe_radius="pECalInsert_final_radius"
+      />
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="EcalEndcapPInsertHits">
+      <segmentation 
+        type="CartesianGridXY"
+        grid_size_x="2.*cm"
+        grid_size_y="2.*cm"
+      />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>
