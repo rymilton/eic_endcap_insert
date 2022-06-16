@@ -1,0 +1,207 @@
+<lccdd>
+  <define>
+    <include ref="ip6/definitions.xml" /> 
+    <include ref="compact/definitions.xml" />
+    <include ref="compact/configuration_nohole.xml"/>
+    
+    <constant name="airgap_thickness"      value="0.125*cm"/>
+    <constant name="Hcal_radiator_thickness" value="1.0*cm"/>
+    <constant name="steel_support" value="0.05*cm"/>
+    <constant name="cassette_thickness" value="0.2*cm"/>
+    <constant name="cable_mix_thickness" value="0.15*cm"/>
+    <constant name="Hcal_scintillator_thickness"    value="0.50*cm"/>
+    <constant name="pcb_thickness"      value="0.1*cm"/>
+    <constant name="gap_thickness"      value="0.1*cm"/>
+    <constant name="Hcal_layer_thickness" 
+      value="airgap_thickness*2 +
+             Hcal_radiator_thickness +
+             steel_support + 
+             Hcal_scintillator_thickness +
+             pcb_thickness  +
+             cassette_thickness*2 + cable_mix_thickness  "
+      />
+    <constant name="HCAL_nLayers" value="38"/>
+    <constant name="HCAL_dim_z" value="HCAL_nLayers*Hcal_layer_thickness"/>
+  </define>
+
+  <includes>
+    <gdmlFile ref="compact/elements.xml"/>
+    <gdmlFile ref="compact/materials.xml"/>
+  </includes>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  <include ref="compact/colors.xml" />
+  </display>
+  
+  <comment> Including the central beampipe </comment>
+  <!--<include ref="ip6/central_beampipe.xml" />-->
+
+  <detectors>
+
+    <comment>
+      The total insert length is modeled as 119.34 cm here.
+      The design will actually be 118.61 cm.
+      The final layer in this model is 1.61 cm absorber, 0.73 cm vacuum.
+      So only 118.61 cm of non-vacuum material is present.
+    </comment>
+    <detector
+      id="EndcapPInsert_ID" 
+      name="EndcapPInsert" 
+      type="EndcapPInsert"
+      readout="HcalEndcapPInsertHits"
+      >
+           
+      <position x="0" y="0*m" z="HCAL_dim_z/2"/>
+      <rotation x="0" y="0" z="0"/>
+      
+       <dimensions 
+        x="72*cm"
+        y="72*cm"
+        z="HCAL_dim_z "
+	/>
+
+       
+      
+      
+      <layer 
+          repeat="38"
+	  thickness="Hcal_layer_thickness"
+       >
+        <slice 
+          name="Absorber_slice"
+          material="Tungsten"
+          thickness="Hcal_radiator_thickness"
+          radiator="yes" 
+          vis="BlueVis"
+        />
+        <slice
+          name="Air_slice"
+          material="Air"
+          thickness="airgap_thickness"
+          vis="Invisible"
+          />
+
+	<slice
+          name="casette_slice"
+          material="Steel235"
+          thickness="cassette_thickness"
+          vis="Invisible"
+          />
+
+	<slice
+          name="cable_mix_slice"
+          material="CFM"
+          thickness="cable_mix_thickness"
+          vis="Invisible"
+        />
+        <slice
+          name="pcb_slice"
+          material="PCB"
+          thickness="pcb_thickness"
+          vis="GreenVis"
+        /> 
+        <slice
+          name="still_support_slice"
+          material="Steel235"
+          thickness="steel_support"
+          vis="Invisible"
+        /> 
+        <slice 
+          name="Scint_slice"
+          material="Polystyrene"
+          thickness="Hcal_scintillator_thickness"
+          vis="CyanVis"
+          sensitive="true"
+        />
+       
+        <slice
+          name="cassette_slice"
+          material="Steel235"
+          thickness="cassette_thickness"
+          vis="Invisible"
+        />
+        <slice
+          name="Air_slice"
+          material="Air"
+          thickness="airgap_thickness"
+          />
+
+      </layer>
+     
+      
+      <beampipe_region 
+        initial_beampipe_radius="EndcapPInsert_opening_radius"
+        final_beampipe_radius="EndcapPInsert_final_radius"
+      />
+    </detector>
+
+
+    <detector id="9"
+              name="LeakageDetector"
+              type="EndcapPInsert"
+              readout="LeakedHits"
+    >
+      <position x="0*m" y="0*m" z="5.05*m"/>
+      <rotation x="0" y="0" z="0"/>
+      <dimensions x="120*cm" y="120*cm" z="95.5*cm"/>
+      
+      <layer 
+        repeat="HCAL_nLayers"
+        thickness = "Hcal_radiator_thickness +
+                     Hcal_scintillator_thickness "
+      >
+        <slice 
+          name="Absorber_slice"
+          material="Steel235"
+          thickness="Hcal_radiator_thickness"
+          vis="BlueVis"
+        />
+        <slice 
+          name="Scint_slice"
+          material="Polystyrene"
+          thickness="Hcal_scintillator_thickness"
+          vis="CyanVis"
+          sensitive="true"
+        />
+      </layer>
+      <beampipe_region
+          initial_beampipe_radius="0.00001*cm"
+          final_beampipe_radius="0.00001*cm"
+      />
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="HcalEndcapPInsertHits">
+      <segmentation 
+        type="CartesianGridXY"
+        grid_size_x="3.*cm"
+        grid_size_y="3.*cm"
+      />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
+    </readout>
+
+    <readout name="LeakedHits">
+      <segmentation
+        type="CartesianGridXY"
+        grid_size_x="3.*cm"
+        grid_size_y="3.*cm"
+      />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>
