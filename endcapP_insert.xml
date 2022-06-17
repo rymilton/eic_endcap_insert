@@ -28,6 +28,9 @@
   <include ref="compact/pHCalInsert.xml"/>
   <include ref="compact/leakage_detector.xml"/>
 
+  <comment> Including the pHCal </comment>
+  <include ref="compact/hcal.xml"/>
+
   <detectors>
   </detectors>
 

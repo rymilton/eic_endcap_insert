@@ -30,7 +30,8 @@ compact_path = os.path.join(detector_path, detector_name)
 #ci_hcal_sf = float(os.environ.get("CI_HCAL_SAMP_FRAC", 0.025))
 #ce_hcal_sf = float(os.environ.get("CE_HCAL_SAMP_FRAC", 0.025))
 ci_hcal_sf = "1."
-ci_ecal_sf = "1."
+ci_hcal_insert_sf = "1."
+ci_ecal_insert_sf = "1."
 
 # input and output
 input_sims = [f.strip() for f in str.split(os.environ["JUGGLER_SIM_FILE"], ",") if f.strip()]
@@ -60,6 +61,8 @@ from Configurables import Jug__Fast__InclusiveKinematicsTruth as InclusiveKinema
 # branches needed from simulation root file
 sim_coll = [
     "MCParticles",
+    "HcalEndcapPHits",
+    "HcalEndcapPHitsContributions",
     "HcalEndcapPInsertHits",
     "HcalEndcapPInsertHitsContributions",
     "EcalEndcapPInsertHits",
@@ -71,50 +74,77 @@ podin = PodioInput("PodioReader", collections=sim_coll)
 podout = PodioOutput("out", filename=output_rec)
 
 # Hcal Hadron Endcap
+
 ci_hcal_daq = dict(
          dynamicRangeADC=200.*MeV,
          capacityADC=32768,
          pedestalMean=400,
          pedestalSigma=10)
 ci_hcal_digi = CalHitDigi("ci_hcal_digi",
-         inputHitCollection="HcalEndcapPInsertHits",
-         outputHitCollection="HcalEndcapPInsertHitsDigi",
+         inputHitCollection="HcalEndcapPHits",
+         outputHitCollection="HcalEndcapHitsDigi",
          **ci_hcal_daq)
 
 ci_hcal_reco = CalHitReco("ci_hcal_reco",
         inputHitCollection=ci_hcal_digi.outputHitCollection,
-        outputHitCollection="HcalEndcapPInsertHitsReco",
+        outputHitCollection="HcalEndcapPHitsReco",
         thresholdFactor=0.0,
         samplingFraction=ci_hcal_sf,
         **ci_hcal_daq)
 
 ci_hcal_merger = CalHitsMerger("ci_hcal_merger",
         inputHitCollection=ci_hcal_reco.outputHitCollection,
+        outputHitCollection="HcalEndcapPHitsRecoXY",
+        readoutClass="HcalEndcapPHits",
+        fields=["layer", "slice"],
+        fieldRefNumbers=[1, 0])
+
+# Hcal Hadron Endcap Insert
+
+ci_hcal_insert_daq = dict(
+         dynamicRangeADC=200.*MeV,
+         capacityADC=32768,
+         pedestalMean=400,
+         pedestalSigma=10)
+ci_hcal_insert_digi = CalHitDigi("ci_hcal_insert_digi",
+         inputHitCollection="HcalEndcapPInsertHits",
+         outputHitCollection="HcalEndcapPInsertHitsDigi",
+         **ci_hcal_insert_daq)
+
+ci_hcal_insert_reco = CalHitReco("ci_hcal_insert_reco",
+        inputHitCollection=ci_hcal_insert_digi.outputHitCollection,
+        outputHitCollection="HcalEndcapPInsertHitsReco",
+        thresholdFactor=0.0,
+        samplingFraction=ci_hcal_insert_sf,
+        **ci_hcal_insert_daq)
+
+ci_hcal_insert_merger = CalHitsMerger("ci_hcal_insert_merger",
+        inputHitCollection=ci_hcal_insert_reco.outputHitCollection,
         outputHitCollection="HcalEndcapPInsertHitsRecoXY",
         readoutClass="HcalEndcapPInsertHits",
         fields=["layer", "slice"],
         fieldRefNumbers=[1, 0])
 
 # Ecal Hadron Endcap
-ci_ecal_daq = dict(
+ci_ecal_insert_daq = dict(
          dynamicRangeADC=200.*MeV,
          capacityADC=32768,
          pedestalMean=400,
          pedestalSigma=10)
-ci_ecal_digi = CalHitDigi("ci_ecal_digi",
+ci_ecal_insert_digi = CalHitDigi("ci_ecal_insert_digi",
          inputHitCollection="EcalEndcapPInsertHits",
          outputHitCollection="EcalEndcapPInsertHitsDigi",
-         **ci_ecal_daq)
+         **ci_ecal_insert_daq)
 
-ci_ecal_reco = CalHitReco("ci_ecal_reco",
-        inputHitCollection=ci_ecal_digi.outputHitCollection,
+ci_ecal_insert_reco = CalHitReco("ci_ecal_insert_reco",
+        inputHitCollection=ci_ecal_insert_digi.outputHitCollection,
         outputHitCollection="EcalEndcapPInsertHitsReco",
         thresholdFactor=0.0,
-        samplingFraction=ci_ecal_sf,
-        **ci_ecal_daq)
+        samplingFraction=ci_ecal_insert_sf,
+        **ci_ecal_insert_daq)
 
-ci_ecal_merger = CalHitsMerger("ci_ecal_merger",
-        inputHitCollection=ci_ecal_reco.outputHitCollection,
+ci_ecal_insert_merger = CalHitsMerger("ci_ecal_insert_merger",
+        inputHitCollection=ci_ecal_insert_reco.outputHitCollection,
         outputHitCollection="EcalEndcapPInsertHitsRecoXY",
         readoutClass="EcalEndcapPInsertHits",
         fields=["layer", "slice"],
@@ -137,7 +167,8 @@ podout.outputCommands = ['drop *',
 ApplicationMgr(
     TopAlg = [podin,
             ci_hcal_digi, ci_hcal_reco, ci_hcal_merger,
-            ci_ecal_digi, ci_ecal_reco, ci_ecal_merger, 
+            ci_hcal_insert_digi, ci_hcal_insert_reco, ci_hcal_insert_merger,
+            ci_ecal_insert_digi, ci_ecal_insert_reco, ci_ecal_insert_merger, 
 	    truth_incl_kin, podout],
     EvtSel = 'NONE',
     EvtMax = n_events,
