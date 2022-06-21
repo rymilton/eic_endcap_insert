@@ -3,14 +3,6 @@
     Simplified homogeneous implementation of the forward ScFi calorimeter
   </comment>
 
-  <define>
-    <constant name="EcalEndcapP_FiberRadius" value="0.235*mm"/>
-    <constant name="EcalEndcapP_FiberOffset" value="0.5*mm"/>
-    <constant name="EcalEndcapP_FiberSpaceX" value="0.265*mm"/>
-    <constant name="EcalEndcapP_FiberSpaceY" value="0.425*mm"/>
-  </define>
-
-
   <limits>
   </limits>
 
