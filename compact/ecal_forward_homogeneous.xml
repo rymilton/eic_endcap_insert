@@ -1,0 +1,67 @@
+<lccdd>
+  <comment>
+    Simplified homogeneous implementation of the forward ScFi calorimeter
+  </comment>
+
+  <define>
+    <constant name="EcalEndcapP_FiberRadius" value="0.235*mm"/>
+    <constant name="EcalEndcapP_FiberOffset" value="0.5*mm"/>
+    <constant name="EcalEndcapP_FiberSpaceX" value="0.265*mm"/>
+    <constant name="EcalEndcapP_FiberSpaceY" value="0.425*mm"/>
+  </define>
+
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <!-- Common Generic visualization attributes -->
+  <comment>Common Generic visualization attributes</comment>
+  <display>
+  </display>
+
+  <detectors>
+
+    <comment>
+      ------------------------------------------
+      Forward (Positive Z) Endcap EM Calorimeter
+      ------------------------------------------
+      An EM calorimeter with ScFi modules
+    </comment>
+    <detector id="ECalEndcapP_ID"
+      name="EcalEndcapP"
+      type="ScFiCalorimeter"
+      vis="EcalEndcapVis"
+      readout="EcalEndcapPHits">
+      <position x="0" y="0" z="pECalInsert_zmin + EcalEndcapP_length/2."/>
+      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" length="EcalEndcapP_length"/>
+      <block
+        radius="EcalEndcapP_rmax"
+        length="EcalEndcapP_length"
+        pipe_r="pECalInsert_opening_radius"
+        material="AvgTungstenScFi"
+        vis="EcalEndcapBlockVis"
+      />
+      <insert
+        sx="pECalInsert_xtotal"
+        sy="pECalInsert_ytotal"
+        sz="pECalInsert_LayerThickness*pECalInsert_numLayers"
+      />
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="EcalEndcapPHits">
+      <segmentation type="CartesianGridXY" grid_size_x="24.925*mm" grid_size_y="24.65*mm"/>
+      <id>system:8,block:8,,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>
+
