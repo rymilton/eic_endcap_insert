@@ -73,7 +73,7 @@
         />
         <slice
           name="Scintillator_slice"
-          material="WSciFi_UCLA_Abs"
+          material="AvgTungstenScFi"
           thickness="pECalInsert_ScintillatorThickness"
           vis="AnlOrange"
           sensitive="true"
