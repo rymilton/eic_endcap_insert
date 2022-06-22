@@ -27,7 +27,8 @@ void gen_particles(
                     const char* out_fname = "gen_particles.hepmc", 
                     TString particle_name = "e-",
                     double th_deg = 3., // Polar angle, in degrees
-                    double p = 10.  // Momentum in GeV/c
+                    double p = 10.,  // Momentum in GeV/c
+		    int dist = 0  //Momentum distribution: 0=fixed, 1=uniform, 2=Gaussian
                   )
 { 
   WriterAscii hepmc_output(out_fname);
@@ -61,9 +62,23 @@ void gen_particles(
     // Define momentum with respect to proton direction
     double phi   = r1->Uniform(0.0, 2.0 * M_PI);
     double th    = th_deg*TMath::DegToRad();
-    double px    = p * std::cos(phi) * std::sin(th);
-    double py    = p * std::sin(phi) * std::sin(th);
-    double pz    = p * std::cos(th);
+
+    //Total momentum distribution
+    double pevent = -1;
+    if(dist==0){ //fixed
+	pevent = p;
+    }
+    else if(dist==1){ //Uniform: +-50% variation
+	pevent = p*(1. + r1->Uniform(-0.5,0.5) );
+    }
+    else if(dist==2){  //Gaussian: Sigma = 0.1*mean
+	while(pevent<0) //Avoid negative values
+		pevent = r1->Gaus(p,0.1*p);
+    }
+
+    double px    = pevent * std::cos(phi) * std::sin(th);
+    double py    = pevent * std::sin(phi) * std::sin(th);
+    double pz    = pevent * std::cos(th);
     TVector3 pvec(px,py,pz); 
 
     //Rotate to lab coordinate system
@@ -75,7 +90,7 @@ void gen_particles(
     GenParticlePtr p3 = std::make_shared<GenParticle>(
         FourVector(
             pvec.X(), pvec.Y(), pvec.Z(),
-            sqrt(p*p + (mass * mass))),
+            sqrt(pevent*pevent + (mass * mass))),
         pdgID, 1);
 
     //If wanted, set non-zero vertex
