@@ -37,7 +37,6 @@
       ------------------------------------------
       Forward (Positive Z) Endcap EM Calorimeter
       ------------------------------------------
-      An EM calorimeter with ScFi modules
     </comment>
     <detector id="ECalEndcapP_ID"
       name="EcalEndcapP"

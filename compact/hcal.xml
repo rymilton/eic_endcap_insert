@@ -28,7 +28,11 @@
 
   <!-- Define detector -->
   <detectors>
-
+    <comment>
+      ------------------------------------------
+      Forward (Positive Z) Endcap Hadronic Calorimeter
+      ------------------------------------------
+    </comment>
     <detector 
       id="HCalEndcapP_ID" 
       name="HcalEndcapP" 
@@ -40,7 +44,8 @@
         z="pHCal_LayerThickness*(pHCal_numLayers-1) +
            pHCal_AbsorberThickness" 
         rmin="pHCal_rmin"
-        rmax="pHCal_rmax"/>
+        rmax="pHCal_rmax"
+      />
       <layer 
         repeat="pHCal_numLayers"
         thickness = "pHCal_LayerThickness"
