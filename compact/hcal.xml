@@ -33,8 +33,7 @@
       id="HCalEndcapP_ID" 
       name="HcalEndcapP" 
       type="pEndcap" 
-      readout="HcalEndcapPHits" 
-      vis="HcalEndcapVis" >
+      readout="HcalEndcapPHits">
       <position x="0" y="0" z="pHCal_zmin"/>
       <comment> HCal has 50 layers + 1 layer of just absorber </comment>
       <dimensions 
@@ -44,7 +43,6 @@
         rmax="pHCal_rmax"/>
       <layer 
         repeat="pHCal_numLayers"
-        vis="HcalEndcapLayerVis" 
         thickness = "pHCal_LayerThickness"
       >
         <slice 
