@@ -3,6 +3,23 @@
     Simplified homogeneous implementation of the forward ScFi calorimeter
   </comment>
 
+    <define>
+    <comment> ECal thicknesses </comment>
+    <constant name="pECal_CoverThickness"            value="0.1*cm"/>
+    <constant name="pECal_AirThickness"              value="10.15*cm"/>
+    <constant name="pECal_PCBThickness"              value="0.25*cm"/>
+    <constant name="pECal_LightGuideThickness"       value="2.5*cm"/>
+    <constant name="pECal_ScintillatorThickness"     value="17.*cm"/>
+
+    <constant name="pECal_LayerThickness"
+      value = "pECal_CoverThickness +
+               pECal_AirThickness +
+               pECal_PCBThickness +
+               pECal_LightGuideThickness +
+               pECal_ScintillatorThickness "
+    />
+  </define>
+
   <limits>
   </limits>
 
@@ -24,23 +41,60 @@
     </comment>
     <detector id="ECalEndcapP_ID"
       name="EcalEndcapP"
-      type="ScFiCalorimeter"
+      type="pEndcap"
       vis="EcalEndcapVis"
       readout="EcalEndcapPHits">
-      <position x="0" y="0" z="pECalInsert_zmin + EcalEndcapP_length/2."/>
-      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" length="EcalEndcapP_length"/>
-      <block
-        radius="EcalEndcapP_rmax"
-        length="EcalEndcapP_length"
-        pipe_r="pECalInsert_opening_radius"
-        material="AvgTungstenScFi"
-        vis="EcalEndcapBlockVis"
+      <position x="0" y="0" z="pECal_zmin"/>
+      <dimensions 
+        rmin="pECal_rmin"
+        rmax="pECal_rmax"
+        z="pECal_LayerThickness*pECal_numLayers"
       />
-      <insert
-        sx="pECalInsert_xtotal"
-        sy="pECalInsert_ytotal"
-        sz="pECalInsert_LayerThickness*pECalInsert_numLayers"
-      />
+      <layer 
+        repeat="pECal_numLayers"
+        vis="EcalEndcapLayerVis" 
+        thickness = "pECal_LayerThickness"
+      >
+        <slice 
+          name="Cover_slice"
+          material="Aluminum"
+          thickness="pECal_CoverThickness"
+          vis="AnlRed"
+        />
+        <slice 
+          name="Air_slice"
+          material="Air"
+          thickness="pECal_AirThickness"
+          vis="AnlRed"
+        />
+        <slice 
+          name="PCB_slice"
+          material="Fr4"
+          thickness="pECal_PCBThickness"
+          vis="AnlRed"
+        />
+        <slice
+          name="LightGuide_slice"
+          material="Plexiglass"
+          thickness="pECal_LightGuideThickness"
+          vis="AnlBlue"
+        />
+        <slice
+          name="Scintillator_slice"
+          material="AvgTungstenScFi"
+          thickness="pECal_ScintillatorThickness"
+          vis="AnlOrange"
+          sensitive="true"
+        /> 
+      </layer>
+      <insert>
+        <position x="pECalInsert_xpos" y="0" z = "0" />
+        <dimensions
+          x="pECalInsert_xtotal"
+          y="pECalInsert_ytotal"
+          z="pECalInsert_LayerThickness*pECalInsert_numLayers"
+        />
+      </insert>
     </detector>
   </detectors>
 
@@ -48,7 +102,7 @@
   <readouts>
     <readout name="EcalEndcapPHits">
       <segmentation type="CartesianGridXY" grid_size_x="24.925*mm" grid_size_y="24.65*mm"/>
-      <id>system:8,block:8,,x:32:-16,y:-16</id>
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 

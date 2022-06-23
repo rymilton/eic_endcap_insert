@@ -3,20 +3,17 @@
   <define>
 
     <documentation>
-      #### Material Thickness 
+      #### HCal Thicknesses 
     </documentation>
-    <constant name="HcalEndcapPSteelThickness"       value="2.0 * cm"/>
-    <constant name="HcalEndcapPPolystyreneThickness" value="0.3 * cm"/>
+    <constant name="pHCal_AbsorberThickness"       value="2.0 * cm"/>
+    <constant name="pHCal_ScintillatorThickness" value="0.3 * cm"/>
+    <constant name="pHCal_AirThickness"         value="0.04 * cm"/>
 
-    <documentation>
-      - Hcal Endcap P Layers and computed Thickness
-    </documentation>
-    <constant name="HcalEndcapPSingleLayerThickness"
-          value="HcalEndcapPSteelThickness + HcalEndcapPPolystyreneThickness"/>
-    <constant name="HcalEndcapPLayer_NRepeat" 
-          value="floor(HcalEndcapP_length / HcalEndcapPSingleLayerThickness)"/>
-    <constant name="HcalEndcapP_thickness" 
-          value="HcalEndcapPLayer_NRepeat * HcalEndcapPSingleLayerThickness"/>
+    <constant name="pHCal_LayerThickness" 
+      value="pHCal_AbsorberThickness +
+             pHCal_ScintillatorThickness +
+             pHCal_AirThickness"
+    />
 
   </define>
 
@@ -35,31 +32,46 @@
     <detector 
       id="HCalEndcapP_ID" 
       name="HcalEndcapP" 
-      type="athena_PolyhedraEndcapCalorimeter2" 
+      type="pEndcap" 
       readout="HcalEndcapPHits" 
-      vis="HcalEndcapVis" 
-      calorimeterType="HAD_ENDCAP"
-      reflect="false">
-      <position x="0" y="0" z="0"/>
+      vis="HcalEndcapVis" >
+      <position x="0" y="0" z="pHCal_zmin"/>
+      <comment> HCal has 50 layers + 1 layer of just absorber </comment>
       <dimensions 
-        numsides="CaloSides" 
-        zmin="pHCalInsert_zmin" 
-        rmin="HcalEndcapP_rmin"
-        rmax="HcalBarrel_rmax"/>
-      <layer repeat="HcalEndcapPLayer_NRepeat" vis="HcalEndcapLayerVis" >
+        z="pHCal_LayerThickness*(pHCal_numLayers-1) +
+           pHCal_AbsorberThickness" 
+        rmin="pHCal_rmin"
+        rmax="pHCal_rmax"/>
+      <layer 
+        repeat="pHCal_numLayers"
+        vis="HcalEndcapLayerVis" 
+        thickness = "pHCal_LayerThickness"
+      >
         <slice 
           material="Steel235"
-          thickness="HcalEndcapPSteelThickness"
-          vis="HcalAbsorberVis"
+          thickness="pHCal_AbsorberThickness"
+          vis="AnlLight_Gray"
         />
         <slice 
           material="PlasticScint126"
-          thickness="HcalEndcapPPolystyreneThickness"
-          vis="HcalSensorVis"
+          thickness="pHCal_ScintillatorThickness"
+          vis="AnlOrange"
           sensitive="yes"
-          limits="cal_limits"
+        />
+        <slice 
+          material="Air"
+          thickness="pHCal_AirThickness"
+          vis="Invisible"
         />
       </layer>
+      <insert>
+        <position x="pHCalInsert_xpos" y="0" z = "0" />
+        <dimensions
+          x="pHCalInsert_xtotal"
+          y="pHCalInsert_ytotal"
+          z="pHCalInsert_LayerThickness*pHCalInsert_numLayers"
+        />
+      </insert>
     </detector>
 
   </detectors>
