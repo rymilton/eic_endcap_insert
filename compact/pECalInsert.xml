@@ -51,19 +51,19 @@
           name="Cover_slice"
           material="Aluminum"
           thickness="pECalInsert_CoverThickness"
-          vis="AnlGray"
+          vis="AnlDarkRed"
         />
         <slice 
           name="Air_slice"
           material="Air"
           thickness="pECalInsert_AirThickness"
-          vis="AnlGray"
+          vis="AnlDarkRed"
         />
         <slice 
           name="PCB_slice"
           material="Fr4"
           thickness="pECalInsert_PCBThickness"
-          vis="AnlGray"
+          vis="AnlDarkRed"
         />
         <slice
           name="LightGuide_slice"
