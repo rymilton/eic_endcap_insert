@@ -51,7 +51,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     _Unicode(repeat),
     51
   );
-  const auto layer_thickness = dd4hep::getAttrOrDefault<double>(
+  auto layer_thickness = dd4hep::getAttrOrDefault<double>(
     layer_xml,
     _Unicode(thickness),
     2.34*cm
@@ -132,6 +132,15 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       double zlayer = z; // zlayer increases by layer_thickness over each layer repeat
       string layer_name = detName + _toString(layer_num, "_layer%d");
 
+      // Want the final layer of Hcal insert to only have an absorber slice
+      // Assumes first slice of a layer is always absorber
+      if(layer_num == repeat && detName == "pHCalInsert")
+      {
+        xml_coll_t l(x_layer, _U(slice));
+        xml_comp_t x_slice = l;
+        layer_thickness = x_slice.thickness();
+      }
+
       Box layer(width / 2., height / 2., layer_thickness / 2.);
       // The cutout shape should change at the start of each layer
       // Convert z to front of insert is z = 0 for radius function
@@ -151,9 +160,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       // Loop over slices
       for(xml_coll_t l(x_layer,_U(slice)); l; ++l) {
 
-        // Want the final layer to only have an absorber slice
-        // Assumes first slice of a layer is always absorber 
-        if(layer_num == repeat && slice_num > 1 && detName!="pECalInsert")
+        // Skipping non-absorber layers in final hcal layer
+        if(layer_num == repeat && slice_num > 1 && detName == "pHCalInsert")
           break;
 
         xml_comp_t x_slice = l;
