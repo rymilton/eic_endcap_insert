@@ -31,6 +31,7 @@ compact_path = os.path.join(detector_path, detector_name)
 #ce_hcal_sf = float(os.environ.get("CE_HCAL_SAMP_FRAC", 0.025))
 ci_hcal_sf = "1."
 ci_hcal_insert_sf = "1."
+ci_ecal_sf = "1."
 ci_ecal_insert_sf = "1."
 
 # input and output
@@ -65,6 +66,8 @@ sim_coll = [
     "HcalEndcapPHitsContributions",
     "HcalEndcapPInsertHits",
     "HcalEndcapPInsertHitsContributions",
+    "EcalEndcapPHits",
+    "EcalEndcapPHitsContributions",
     "EcalEndcapPInsertHits",
     "EcalEndcapPInsertHitsContributions"
 ]
@@ -125,7 +128,32 @@ ci_hcal_insert_merger = CalHitsMerger("ci_hcal_insert_merger",
         fields=["layer", "slice"],
         fieldRefNumbers=[1, 0])
 
-# Ecal Hadron Endcap
+ci_ecal_daq = dict(
+         dynamicRangeADC=200.*MeV,
+         capacityADC=32768,
+         pedestalMean=400,
+         pedestalSigma=10)
+ci_ecal_digi = CalHitDigi("ci_ecal_digi",
+         inputHitCollection="EcalEndcapPHits",
+         outputHitCollection="EcalEndcapHitsDigi",
+         **ci_hcal_daq)
+
+ci_ecal_reco = CalHitReco("ci_ecal_reco",
+        inputHitCollection=ci_ecal_digi.outputHitCollection,
+        outputHitCollection="EcalEndcapPHitsReco",
+        thresholdFactor=0.0,
+        samplingFraction=ci_ecal_sf,
+        **ci_ecal_daq)
+
+ci_ecal_merger = CalHitsMerger("ci_ecal_merger",
+        inputHitCollection=ci_ecal_reco.outputHitCollection,
+        outputHitCollection="EcalEndcapPHitsRecoXY",
+        readoutClass="EcalEndcapPHits",
+        fields=["layer", "slice"],
+        fieldRefNumbers=[1, 0])
+
+
+# Ecal Hadron Endcap Insert
 ci_ecal_insert_daq = dict(
          dynamicRangeADC=200.*MeV,
          capacityADC=32768,
@@ -168,6 +196,7 @@ ApplicationMgr(
     TopAlg = [podin,
             ci_hcal_digi, ci_hcal_reco, ci_hcal_merger,
             ci_hcal_insert_digi, ci_hcal_insert_reco, ci_hcal_insert_merger,
+            ci_ecal_digi, ci_ecal_reco, ci_ecal_merger,
             ci_ecal_insert_digi, ci_ecal_insert_reco, ci_ecal_insert_merger, 
 	    truth_incl_kin, podout],
     EvtSel = 'NONE',
