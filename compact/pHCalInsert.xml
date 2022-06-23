@@ -46,10 +46,12 @@
     >
       <position x="pHCalInsert_xpos" y="0*m" z="pHCalInsert_zmin"/>
       <rotation x="0" y="0" z="0"/>
+      <comment> HCal insert has 50 layers + 1 layer of just absorber </comment>
       <dimensions 
         x="pHCalInsert_xtotal"
         y="pHCalInsert_ytotal"
-        z="pHCalInsert_LayerThickness*pHCalInsert_numLayers"
+        z="pHCalInsert_LayerThickness*(pHCalInsert_numLayers-1) +
+           pHCalInsert_AbsorberThickness"
       />
       <layer 
         repeat="pHCalInsert_numLayers" 
