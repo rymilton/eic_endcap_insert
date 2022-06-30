@@ -1,35 +1,45 @@
 #!/bin/bash
+# Usage: run_sim_hepmc <proc> <particle>
+set -o errexit
 
 # Input simulation parameters
-particle="pi-"
-beam_energy=40
+particle="$2"
+energies=(1 2 5 10 20 30 40 50 60 70 80 90 100)
+j=$(( $1 % 10 ))
+k=$(( $1 / 10 ))
+beam_energy=${energies[k]}
+min_e=$(echo "$beam_energy * 0.1" | bc)
 num_events=1000
 theta=2.83 # theta in degrees
 
+OUTDIR=$SPIN/data/eic/insert
+mkdir -p ${OUTDIR}
+
 # Output file names
-info_string="${particle}_${beam_energy}GeV_theta_${theta}deg"
-hepmcfile="gen_${info_string}.hepmc"
-simfile="insert_sim_${info_string}.root"
-recofile="insert_reco_${info_string}.edm4hep.root"
+compact_file=./endcapP_insert.xml
+info_string="${particle}_${beam_energy}GeV_theta_${theta}deg-$j"
+hepmc_file="${OUTDIR}/gen_${info_string}.hepmc"
+sim_file="${OUTDIR}/sim_${info_string}.root"
+reco_file="${OUTDIR}/reco_${info_string}.edm4hep.root"
 
 # Generating hepmc file
 root -l -b -q "./hepmc_generation/gen_particles.cxx+(\
 ${num_events},\
-\"${hepmcfile}\",\
+\"${hepmc_file}\",\
 \"${particle}\",\
 ${theta},\
 ${beam_energy})"
 
 # Running simulation
-npsim \
-   --compactFile endcapP_insert.xml \
-   --numberOfEvents ${num_events} \
-   --inputFiles ${hepmcfile} \
-   --outputFile ${simfile}  || exit
-   
-# Deleting hepmcfile  
-rm ${hepmcfile}
+npsim --runType batch \
+      -v WARNING \
+      --part.minimalKineticEnergy "${min_e}*GeV" \
+      --physics.list "FTFP_BERT_HP" \
+      --physics.rangecut "None" \
+      --numberOfEvents ${num_events} \
+      --compactFile ${compact_file} \
+      --inputFiles ${hepmc_file} \
+      --outputFile ${sim_file}
 
-# Running reconstruction
-export JUGGLER_SIM_FILE=${simfile} JUGGLER_REC_FILE=${recofile} JUGGLER_N_EVENTS=${num_events}
-gaudirun.py endcapP_insert_reco.py
+# Deleting hepmc_file
+rm ${hepmc_file}
