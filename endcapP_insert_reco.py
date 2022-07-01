@@ -136,7 +136,7 @@ ci_ecal_daq = dict(
 ci_ecal_digi = CalHitDigi("ci_ecal_digi",
          inputHitCollection="EcalEndcapPHits",
          outputHitCollection="EcalEndcapHitsDigi",
-         **ci_hcal_daq)
+         **ci_ecal_daq)
 
 ci_ecal_reco = CalHitReco("ci_ecal_reco",
         inputHitCollection=ci_ecal_digi.outputHitCollection,
