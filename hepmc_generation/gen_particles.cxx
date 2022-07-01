@@ -26,7 +26,10 @@ void gen_particles(
                     int n_events = 1000, 
                     const char* out_fname = "gen_particles.hepmc", 
                     TString particle_name = "e-",
-                    double th_deg = 3., // Polar angle, in degrees
+                    double th_min = 3., // Minimum polar angle, in degrees
+		    double th_max = 3., // Maximum polar angle, in degrees
+		    double phi_min = 0., // Minimum azimuthal angle, in degrees
+                    double phi_max = 360., // Maximum azimuthal angle, in degrees
                     double p = 10.,  // Momentum in GeV/c
 		    int dist = 0  //Momentum distribution: 0=fixed, 1=uniform, 2=Gaussian
                   )
@@ -60,8 +63,8 @@ void gen_particles(
         FourVector(0.0, 0.0, 0.0, 0.938), 2212, 4);
 
     // Define momentum with respect to proton direction
-    double phi   = r1->Uniform(0.0, 2.0 * M_PI);
-    double th    = th_deg*TMath::DegToRad();
+    double phi   = r1->Uniform(phi_min*TMath::DegToRad(),phi_max*TMath::DegToRad());
+    double th    = r1->Uniform(th_min*TMath::DegToRad(),th_max*TMath::DegToRad());
 
     //Total momentum distribution
     double pevent = -1;

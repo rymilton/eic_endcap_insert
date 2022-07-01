@@ -10,7 +10,10 @@ k=$(( $1 / 10 ))
 beam_energy=${energies[k]}
 min_e=$(echo "$beam_energy * 0.1" | bc)
 num_events=1000
-theta=2.83 # theta in degrees
+theta_min=2.83 # in degrees
+theta_max=2.83 # in degrees
+phi_min=0. # in degrees
+phi_max=360. # in degrees 
 
 OUTDIR=$SPIN/data/eic/insert
 mkdir -p ${OUTDIR}
@@ -27,7 +30,10 @@ root -l -b -q "./hepmc_generation/gen_particles.cxx+(\
 ${num_events},\
 \"${hepmc_file}\",\
 \"${particle}\",\
-${theta},\
+${theta_min},\
+${theta_max},\
+${phi_min},\
+${phi_max},\
 ${beam_energy})"
 
 # Running simulation
