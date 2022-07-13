@@ -15,8 +15,9 @@
     <constant name="pHCal_zmin"     value="380*cm"/>
     <constant name="pHCal_rmin"   value="0*cm"/>
     <constant name="pHCal_rmax"   value="267*cm"/>
-    <constant name="pHCal_numSteelLayers"   value="60"/>
-    <constant name="pHCal_numTungstenLayers"   value="10"/>
+    <constant name="pHCal_ECCE_numSteelLayers"   value="60"/>
+    <constant name="pHCal_ECCE_numTungstenLayers"   value="10"/>
+    <constant name="pHCal_ATHENA_numSteelLayers"   value="51"/>
 
     <constant name="pECalInsert_zmin"     value="350*cm"/>
     <constant name="pECalInsert_xpos"     value="-10*cm"/>

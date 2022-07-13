@@ -26,13 +26,15 @@
   <comment> Including the pEndcap insert </comment>
   <include ref="compact/pECalInsert.xml"/>
   <include ref="compact/pHCalInsert.xml"/>
-  <include ref="compact/leakage_detector.xml"/>
+  <!-- <include ref="compact/leakage_detector.xml"/> -->
 
   <comment> Including the pEndcap homogeneous </comment>
   <include ref="compact/ecal_forward_homogeneous.xml"/>
 
   <comment> Including the pHCal </comment>
-  <include ref="compact/hcal.xml"/>
+  <comment> Must be included after pHCalInsert </comment>
+  <comment> Change to compact/hcal_ECCE.xml for ECCE pHCal</comment>
+  <include ref="compact/hcal_ATHENA.xml"/>
 
   <detectors>
   </detectors>

@@ -1,7 +1,9 @@
   <define>
     <documentation>
-      ## Insert with basically no hole. 
-      ## Make sure to comment out the beampipe in endcapP_insert.xml
+      Insert with basically no hole. 
+      Make sure to comment out the beampipe in endcapP_insert.xml
+      pHCal and pHCal_Insert assumes final layer is abosrber only 
+        -- Will get n-1 layers of Absorber/Sc and 1 layer of Absorber for final section
     </documentation>
     <constant name="pHCalInsert_zmin"     value="380.0*cm"/>
     <constant name="pHCalInsert_xpos"     value="-10*cm"/>
@@ -14,7 +16,9 @@
     <constant name="pHCal_zmin"     value="380*cm"/>
     <constant name="pHCal_rmin"   value="0*cm"/>
     <constant name="pHCal_rmax"   value="267*cm"/>
-    <constant name="pHCal_numLayers"   value="51"/>
+    <constant name="pHCal_ECCE_numSteelLayers"   value="60"/>
+    <constant name="pHCal_ECCE_numTungstenLayers"   value="10"/>
+    <constant name="pHCal_ATHENA_numSteelLayers"   value="51"/>
     
     <constant name="pECalInsert_zmin"     value="350*cm"/>
     <constant name="pECalInsert_xpos"     value="-10*cm"/>
