@@ -5,15 +5,19 @@
     <documentation>
       #### HCal Thicknesses 
     </documentation>
-    <constant name="pHCal_AbsorberThickness"       value="2.0 * cm"/>
-    <constant name="pHCal_ScintillatorThickness" value="0.3 * cm"/>
-    <constant name="pHCal_AirThickness"         value="0.04 * cm"/>
+    <constant name="pHCal_SteelThickness"       value="1.6 * cm"/>
+    <constant name="pHCal_TungstenThickness"       value="1.6 * cm"/>
+    <constant name="pHCal_ScintillatorThickness" value="0.4 * cm"/>
 
-    <constant name="pHCal_LayerThickness" 
-      value="pHCal_AbsorberThickness +
-             pHCal_ScintillatorThickness +
-             pHCal_AirThickness"
+    <constant name="pHCal_SteelLayerThickness" 
+      value="pHCal_SteelThickness +
+             pHCal_ScintillatorThickness"
     />
+    <constant name="pHCal_TungstenLayerThickness" 
+      value="pHCal_SteelThickness +
+             pHCal_ScintillatorThickness"
+    />
+
 
   </define>
 
@@ -39,20 +43,22 @@
       type="pEndcap" 
       readout="HcalEndcapPHits">
       <position x="0" y="0" z="pHCal_zmin"/>
-      <comment> HCal has 50 layers + 1 layer of just absorber </comment>
+      <comment> HCal has 60 layers of Steel/Sc +  9 layers W/Sc + 1 layer W </comment>
       <dimensions 
-        z="pHCal_LayerThickness*(pHCal_numLayers-1) +
-           pHCal_AbsorberThickness" 
+        z="pHCal_SteelLayerThickness*pHCal_numSteelLayers +
+           pHCal_TungstenLayerThickness*(pHCal_numTungstenLayers-1) +
+           pHCal_TungstenThickness" 
         rmin="pHCal_rmin"
         rmax="pHCal_rmax"
       />
+      <comment> Steel/Sc layers </comment>
       <layer 
-        repeat="pHCal_numLayers"
-        thickness = "pHCal_LayerThickness"
+        repeat="pHCal_numSteelLayers"
+        thickness = "pHCal_SteelLayerThickness"
       >
         <slice 
           material="Steel235"
-          thickness="pHCal_AbsorberThickness"
+          thickness="pHCal_SteelThickness"
           vis="AnlLight_Gray"
         />
         <slice 
@@ -61,10 +67,33 @@
           vis="AnlOrange"
           sensitive="yes"
         />
+      </layer>
+      <comment> W/Sc layers </comment>
+      <layer 
+        repeat="pHCal_numTungstenLayers-1"
+        thickness = "pHCal_TungstenLayerThickness"
+      >
         <slice 
-          material="Air"
-          thickness="pHCal_AirThickness"
-          vis="Invisible"
+          material="Tungsten"
+          thickness="pHCal_TungstenThickness"
+          vis="AnlBlue"
+        />
+        <slice 
+          material="PlasticScint126"
+          thickness="pHCal_ScintillatorThickness"
+          vis="AnlOrange"
+          sensitive="yes"
+        />
+      </layer>
+      <comment> Final layer of tungsten </comment>
+      <layer 
+        repeat="1"
+        thickness = "pHCal_TungstenThickness"
+      >
+        <slice 
+          material="Tungsten"
+          thickness="pHCal_TungstenThickness"
+          vis="AnlBlue"
         />
       </layer>
       <insert>

@@ -33,7 +33,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
 
   Tube envelope(rmin, rmax, length / 2.0);
-  Box insert(insert_dim.x() / 2., insert_dim.y() / 2., insert_dim.z() / 2.);
+  Box insert(insert_dim.x() / 2., insert_dim.y() / 2., length / 2.);
   SubtractionSolid envelope_with_inserthole(
     envelope,
     insert,
@@ -58,16 +58,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     for(int i = 0; i < repeat; i++) {
       double zlayer = z; // zlayer increases by layer_thickness over each loop
       string layer_name = detName + _toString(layer_num, "_layer%d");
-
-      // Want the final layer of Hcal to only have an absorber slice
-      // Assumes first slice of a layer is always absorber
-      if(layer_num == repeat && detName == "HcalEndcapP")
-      {
-        xml_coll_t l(x_layer, _U(slice));
-        xml_comp_t x_slice = l;
-        layer_thickness = x_slice.thickness();
-      }
-
       Tube layer(rmin, rmax, layer_thickness / 2.);
 
       // Removing insert shape from each layer
@@ -86,10 +76,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       int slice_num = 1;
       // Loop over slices
       for(xml_coll_t l(x_layer,_U(slice)); l; ++l) {
-
-        // Skipping non-absorber layers in final hcal layer
-        if(layer_num == repeat && slice_num > 1 && detName == "HcalEndcapP")
-          break;
 
         xml_comp_t x_slice = l;
         double slice_thickness = x_slice.thickness();
