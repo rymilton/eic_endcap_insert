@@ -169,7 +169,7 @@
         thickness = "pHCalInsert_AbsorberThickness"
       >
         <slice 
-          material="Steel235"
+          material="Tungsten"
           thickness="pHCalInsert_AbsorberThickness"
           vis="AnlGray"
         />
