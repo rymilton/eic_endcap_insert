@@ -41,13 +41,13 @@
       <position x="0" y="0" z="pHCal_zmin"/>
       <comment> HCal has 50 layers + 1 layer of just absorber </comment>
       <dimensions 
-        z="pHCal_LayerThickness*(pHCal_ATHENA_numSteelLayers-1) +
+        z="pHCal_LayerThickness*(pHCal_ATHENA_numSteelScLayers) +
            pHCal_AbsorberThickness" 
         rmin="pHCal_rmin"
         rmax="pHCal_rmax"
       />
       <layer 
-        repeat="pHCal_ATHENA_numSteelLayers - 1"
+        repeat="pHCal_ATHENA_numSteelScLayers"
         thickness = "pHCal_LayerThickness"
       >
         <slice 

@@ -45,15 +45,15 @@
       <position x="0" y="0" z="pHCal_zmin"/>
       <comment> HCal has 60 layers of Steel/Sc +  9 layers W/Sc + 1 layer W </comment>
       <dimensions 
-        z="pHCal_SteelLayerThickness*pHCal_ECCE_numSteelLayers +
-           pHCal_TungstenLayerThickness*(pHCal_ECCE_numTungstenLayers-1) +
+        z="pHCal_SteelLayerThickness*pHCal_ECCE_numSteelScLayers +
+           pHCal_TungstenLayerThickness*pHCal_ECCE_numTungstenScLayers +
            pHCal_TungstenThickness" 
         rmin="pHCal_rmin"
         rmax="pHCal_rmax"
       />
       <comment> Steel/Sc layers </comment>
       <layer 
-        repeat="pHCal_ECCE_numSteelLayers"
+        repeat="pHCal_ECCE_numSteelScLayers"
         thickness = "pHCal_SteelLayerThickness"
       >
         <slice 
@@ -70,7 +70,7 @@
       </layer>
       <comment> W/Sc layers </comment>
       <layer 
-        repeat="pHCal_ECCE_numTungstenLayers-1"
+        repeat="pHCal_ECCE_numTungstenScLayers"
         thickness = "pHCal_TungstenLayerThickness"
       >
         <slice 
