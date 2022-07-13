@@ -29,7 +29,7 @@
   <!--include ref="compact/leakage_detector.xml"/-->
 
   <comment> Including the pEndcap homogeneous </comment>
-  <include ref="compact/ecal_forward_homogeneous.xml">
+  <include ref="compact/ecal_forward_homogeneous.xml"/>
 
   <comment> Including the pHCal </comment>
   <!--include ref="compact/hcal.xml"/-->

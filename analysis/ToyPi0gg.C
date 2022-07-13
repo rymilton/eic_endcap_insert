@@ -13,23 +13,23 @@
 
 using namespace std;
 
-void pi0gToy(const Int_t nev = 10000)
+void ToyPi0gg(const Int_t nev = 10000)
 {
   const Int_t nd = 5;
   const Int_t nb = 1;
   const Int_t nin = (2*nb+1)*(2*nb+1);
   const Int_t nout = 2;
   Int_t ntruth;
-  array<Double_t, (2*nd+1)*(2*nd+1)> v_e;
-  array<Double_t, nin> v_in;
-  array<Double_t, nout> v_out;
+  array<Float_t, (2*nd+1)*(2*nd+1)> v_e;
+  array<Float_t, nin> v_in;
+  array<Float_t, nout> v_out;
 
   auto t_data = new TTree("T", "Training data");
   t_data->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
-    t_data->Branch(Form("e%d", i+1), &v_in[i]);
+    t_data->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
   for(Int_t i=0; i<nout; i++)
-    t_data->Branch(Form("n%d", i+1), &v_out[i]);
+    t_data->Branch(Form("n%d", i+1), &v_out[i], Form("n%d/F", i+1));
 
   auto h2_e = new TH2F("h2_e", "Energy;x;y", 2*nd+1,-nd-0.5,nd+0.5, 2*nd+1,-nd-0.5,nd+0.5);
 
@@ -44,7 +44,7 @@ void pi0gToy(const Int_t nev = 10000)
     ntruth = rnd->Integer(nout) + 1;
     v_out[ntruth-1] = 1.;
 
-    Double_t truth_x[nout], truth_y[nout], truth_peak[nout];
+    Float_t truth_x[nout], truth_y[nout], truth_peak[nout];
     for(Int_t ic=0; ic<ntruth; ic++)
     {
       truth_x[ic] = rnd->Gaus(0, 0.8);
@@ -61,7 +61,7 @@ void pi0gToy(const Int_t nev = 10000)
               TMath::Gaus(j - truth_y[ic], 0, 0.6, kTRUE) *
               (1 + rnd->Gaus(0, 0.08)) );
 
-    Double_t sum_in = 0.;
+    Float_t sum_in = 0.;
     Int_t npeak = distance(v_e.begin(), max_element(v_e.begin(), v_e.end()));
     Int_t ipeak = npeak / (2*nd+1);
     Int_t jpeak = npeak % (2*nd+1);
@@ -70,7 +70,7 @@ void pi0gToy(const Int_t nev = 10000)
         for(Int_t j=-nb; j<=nb; j++)
           if(jpeak+j >= 0 && jpeak+j <= 2*nd)
           {
-            Double_t et = v_e[(ipeak+i)*(2*nd+1)+(jpeak+j)];
+            Float_t et = v_e[(ipeak+i)*(2*nd+1)+(jpeak+j)];
             v_in[(i+nb)*(2*nb+1)+(j+nb)] = et;
             sum_in += et;
           }
@@ -108,8 +108,10 @@ void pi0gToy(const Int_t nev = 10000)
   for(Long64_t ien=0; ien<t_data->GetEntries(); ien++)
   {
     t_data->GetEntry(ien);
-    Double_t n1 = mlp->Evaluate(0, v_in.begin());
-    Double_t n2 = mlp->Evaluate(1, v_in.begin());
+    array<Double_t, nin> v_inf;
+    copy(v_in.begin(), v_in.end(), v_inf.begin());
+    Double_t n1 = mlp->Evaluate(0, v_inf.begin());
+    Double_t n2 = mlp->Evaluate(1, v_inf.begin());
     Int_t npred = n1 > n2 ? 1 : 2;
     if(npred == ntruth)
       correct++;
