@@ -17,7 +17,7 @@
              pHCalInsert_ESRThickness +
              pHCalInsert_PCBThickness +
              pHCalInsert_AirThickness "
-    />    
+    />
   </define>
 
   <limits>
@@ -46,7 +46,7 @@
     >
       <position x="pHCalInsert_xpos" y="0*m" z="pHCalInsert_zmin"/>
       <rotation x="0" y="0" z="0"/>
-      <comment> HCal insert has 50 layers + 1 layer of just absorber </comment>
+      <comment> HCal insert has 50 layers of Abs/Sc + 1 layer of just absorber </comment>
       <dimensions 
         x="pHCalInsert_xtotal"
         y="pHCalInsert_ytotal"
@@ -54,7 +54,7 @@
            pHCalInsert_LayerThickness*pHCalInsert_numSteelScLayers +
            pHCalInsert_AbsorberThickness"
       />
-      <constant name = layer_thickness value= pHCalInsert_LayerThickness />
+      <constant name = final_layer_thickness value= pHCalInsert_AbsorberThickness />
       <comment> W/Sc layers </comment>
       <layer 
         repeat="pHCalInsert_numTungstenScLayers" 

@@ -3,11 +3,14 @@
       Insert with basically no hole. 
       Make sure to comment out the beampipe in endcapP_insert.xml
       pHCal will add an extra layer of only absorber
+      pHCal and pHCal insert will add an extra layer of only absorber
     </documentation>
     <constant name="pHCalInsert_zmin"     value="380.0*cm"/>
     <constant name="pHCalInsert_xpos"     value="-10*cm"/>
     <constant name="pHCalInsert_xtotal"   value="59.6*cm"/>
     <constant name="pHCalInsert_ytotal"   value="59.7485*cm"/>
+    <constant name="pHCalInsert_numTungstenScLayers"   value="30"/>
+    <constant name="pHCalInsert_numSteelScLayers"   value="20"/>
     <constant name="pHCalInsert_numLayers"   value="51"/>
     <constant name="pHCalInsert_opening_radius" value="0.00001*cm"/>
     <constant name="pHCalInsert_final_radius" value="0.00001*cm"/>
