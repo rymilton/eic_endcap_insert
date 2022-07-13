@@ -67,7 +67,7 @@
           vis="Invisible"
         />
       </layer>
-      <comment> Final layer of steel </comment>
+      <comment> Final layer of absorber </comment>
       <layer 
         repeat="1"
         thickness = "pHCal_AbsorberThickness"
@@ -78,12 +78,13 @@
           vis="AnlLight_Gray"
         />
       </layer>
+      <comment> z here is a dummy -- insert cut-out will just be the length of the pHCal </comment>
       <insert>
         <position x="pHCalInsert_xpos" y="0" z = "0" />
         <dimensions
           x="pHCalInsert_xtotal"
           y="pHCalInsert_ytotal"
-          z="pHCalInsert_LayerThickness*pHCalInsert_numLayers"
+          z="0"
         />
       </insert>
     </detector>
