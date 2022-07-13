@@ -14,9 +14,9 @@ using namespace std;
 
 void DrawPi0gg()
 {
-  const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/endcap";
+  const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
-  file_name.Form("%s/training-pi0_15_60GeV_theta_15_20deg.root", data_dir);
+  file_name.Form("%s/histos/training.root", data_dir);
   auto f = new TFile(file_name);
   if(!f || !f->IsOpen())
   {

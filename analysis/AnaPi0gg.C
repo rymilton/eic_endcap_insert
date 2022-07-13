@@ -15,7 +15,7 @@ using namespace std;
 template<class T> inline constexpr T square(const T &x) { return x*x; }
 template<class T> inline constexpr T point_dis(const T &x1, const T &y1, const T &x2, const T &y2) { return sqrt(square(x1-x2)+square(y1-y2)); }
 
-Float_t reco(Float_t E0)
+Float_t reco(Float_t E0, TRandom *rnd)
 {
   const Float_t threshold = 6.1;
   if(E0 < threshold)
@@ -27,15 +27,15 @@ Float_t reco(Float_t E0)
     Float_t a = 0.1;
     Float_t b = 0.0015;
     Float_t sigma =  E0 * TMath::Sqrt(a*a/E0 + b*b);
-    return TMath::Abs(gRandom->Gaus(E0*0.03, sigma));
+    return TMath::Abs(rnd->Gaus(E0*0.03, sigma));
   }
 }
 
-void AnaPi0gg(Double_t energy)
+void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
 {
   const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
-  file_name.Form("%s/endcap/sim_pi0_%gGeV_theta_15_20deg.root", data_dir, energy);
+  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto data_file = new TFile(file_name);
   if(!data_file || !data_file->IsOpen())
   {
@@ -59,7 +59,7 @@ void AnaPi0gg(Double_t energy)
   array<Float_t, nin> v_in;
   array<Float_t, nout> v_out;
 
-  file_name.Form("%s/histos/training-pi0_%gGeV_theta_15_20deg.root", data_dir, energy);
+  file_name.Form("%s/histos/training-%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto f_out = new TFile(file_name, "RECREATE");
   auto t_data = new TTree("T", "Training data");
   t_data->Branch("ntruth", &ntruth, "ntruth/I");
@@ -69,6 +69,8 @@ void AnaPi0gg(Double_t energy)
     t_data->Branch(Form("n%d", i+1), &v_out[i], Form("n%d/F", i+1));
 
   auto h2_e = new TH2F("h2_e", "Energy;x;y", 2*nd+1,-nd-0.5,nd+0.5, 2*nd+1,-nd-0.5,nd+0.5);
+
+  auto rnd = new TRandom3(0);
 
   const Int_t ntrack = 1000;
   Int_t pid[ntrack];
@@ -86,20 +88,21 @@ void AnaPi0gg(Double_t energy)
   {
     events->GetEntry(iev);
 
-    Int_t npeak = 0;
-    for(Int_t imc = 3; imc < events->GetLeaf("MCParticles.PDG")->GetLen(); imc++)
+    Int_t imcg[ntrack];
+    Int_t ng = 0;
+    for(Int_t imc = 2; imc < events->GetLeaf("MCParticles.PDG")->GetLen(); imc++)
       if(pid[imc] == 22)
-        npeak++;
+        imcg[ng++] = imc;
 
-    if(npeak <= 0 || npeak > 2)
+    if(ng <= 0 || ng > 2)
       continue;
 
-    if(npeak == 2 && point_dis(mc_x[3], mc_y[3], mc_x[4], mc_y[4]) > 2.*tsize)
+    if(ng == 2 && point_dis(mc_x[imcg[0]], mc_y[imcg[0]], mc_x[imcg[1]], mc_y[imcg[1]]) > 2.*tsize)
       ntruth = 1;
     else
-      ntruth = npeak;
+      ntruth = ng;
 
-    for(Int_t ip=0; ip<npeak; ip++)
+    for(Int_t ig=0; ig<ng; ig++)
     {
       v_in.fill(0.);
       v_out.fill(0.);
@@ -108,9 +111,9 @@ void AnaPi0gg(Double_t energy)
       Float_t sum_in = 0.;
       for(Long64_t ihit = 0; ihit < events->GetLeaf("EcalEndcapPHits.energy")->GetLen(); ihit++)
       {
-        Int_t ix = round((hit_x[ihit] - mc_x[3+ip]) / tsize_x);
-        Int_t iy = round((hit_y[ihit] - mc_y[3+ip]) / tsize_y);
-        Float_t ereco = reco(hit_e[ihit]);
+        Int_t ix = round((hit_x[ihit] - mc_x[imcg[ig]]) / tsize_x);
+        Int_t iy = round((hit_y[ihit] - mc_y[imcg[ig]]) / tsize_y);
+        Float_t ereco = reco(hit_e[ihit], rnd);
         h2_e->Fill(ix, iy, ereco);
         if(abs(ix) <= nb && abs(iy) <= nb)
         {
@@ -125,7 +128,7 @@ void AnaPi0gg(Double_t energy)
             v_in[(i+nb)*(2*nb+1)+(j+nb)] /= sum_in;
 
       t_data->Fill();
-    } // ip
+    } // ig
   } // iev
 
   f_out->Write();
