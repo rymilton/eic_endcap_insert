@@ -17,7 +17,7 @@
              pHCalInsert_ESRThickness +
              pHCalInsert_PCBThickness +
              pHCalInsert_AirThickness "
-    />
+    />    
   </define>
 
   <limits>
@@ -50,18 +50,74 @@
       <dimensions 
         x="pHCalInsert_xtotal"
         y="pHCalInsert_ytotal"
-        z="pHCalInsert_LayerThickness*(pHCalInsert_numLayers-1) +
+        z="pHCalInsert_LayerThickness*pHCalInsert_numTungstenScLayers +
+           pHCalInsert_LayerThickness*pHCalInsert_numSteelScLayers +
            pHCalInsert_AbsorberThickness"
       />
+      <constant name = layer_thickness value= pHCalInsert_LayerThickness />
+      <comment> W/Sc layers </comment>
       <layer 
-        repeat="pHCalInsert_numLayers" 
+        repeat="pHCalInsert_numTungstenScLayers" 
         thickness = "pHCalInsert_LayerThickness"
       >
         <slice 
           name="Absorber_slice"
           material="Tungsten"
           thickness="pHCalInsert_AbsorberThickness"
-          radiator="yes" 
+          vis="AnlBlue"
+        />
+        <slice
+          name="Air_slice"
+          material="Air"
+          thickness="pHCalInsert_AirThickness"
+          vis="Invisible"
+        />
+        <slice
+          name="ESRfoil_slice"
+          material="Polystyrole"
+          thickness="pHCalInsert_ESRThickness"
+          vis="Invisible"
+        /> 
+        <slice
+          name="ScintCover_slice"
+          material="Aluminum"
+          thickness="pHCalInsert_ScintCoverThickness"
+          vis="Invisible"
+        /> 
+        <slice 
+          name="Scint_slice"
+          material="PlasticScint126"
+          thickness="pHCalInsert_ScintThickness"
+          vis="AnlOrange"
+          sensitive="true"
+        />
+        <slice
+          name="ESRfoil_slice"
+          material="Polystyrole"
+          thickness="pHCalInsert_ESRThickness"
+          vis="Invisible"
+        />
+        <slice
+          name="PCB_slice"
+          material="Fr4"
+          thickness="pHCalInsert_PCBThickness"
+          vis="AnlBlue"
+        />
+        <slice
+          name="Air_slice"
+          material="Air"
+          thickness="pHCalInsert_AirThickness"
+        />
+      </layer>
+      <comment> Steel/Sc layers </comment>
+      <layer 
+        repeat="pHCalInsert_numSteelScLayers" 
+        thickness = "pHCalInsert_LayerThickness"
+      >
+        <slice 
+          name="Absorber_slice"
+          material="Steel235"
+          thickness="pHCalInsert_AbsorberThickness"
           vis="AnlGray"
         />
         <slice
@@ -105,6 +161,17 @@
           name="Air_slice"
           material="Air"
           thickness="pHCalInsert_AirThickness"
+        />
+      </layer>
+      <comment> Final layer of absorber </comment>
+      <layer 
+        repeat="1"
+        thickness = "pHCalInsert_AbsorberThickness"
+      >
+        <slice 
+          material="Steel235"
+          thickness="pHCalInsert_AbsorberThickness"
+          vis="AnlGray"
         />
       </layer>
       <beampipe_region 

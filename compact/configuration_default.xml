@@ -7,7 +7,8 @@
     <constant name="pHCalInsert_xpos"     value="-10*cm"/>
     <constant name="pHCalInsert_xtotal"   value="59.6*cm"/>
     <constant name="pHCalInsert_ytotal"   value="59.7485*cm"/>
-    <constant name="pHCalInsert_numLayers"   value="51"/>
+    <constant name="pHCalInsert_numTungstenScLayers"   value="30"/>
+    <constant name="pHCalInsert_numSteelScLayers"   value="20"/>
     <constant name="pHCalInsert_opening_radius" value="15.*cm"/>
     <constant name="pHCalInsert_final_radius" value="17.25*cm"/>
 
