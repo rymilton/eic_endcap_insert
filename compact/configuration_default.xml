@@ -1,6 +1,7 @@
   <define>
     <documentation>
-      ## Default insert configuration for angled beampipe
+      Default insert configuration for angled beampipe
+      pHCal will add an extra layer of only absorber
     </documentation>
     <constant name="pHCalInsert_zmin"     value="380*cm"/>
     <constant name="pHCalInsert_xpos"     value="-10*cm"/>
@@ -13,7 +14,9 @@
     <constant name="pHCal_zmin"     value="380*cm"/>
     <constant name="pHCal_rmin"   value="0*cm"/>
     <constant name="pHCal_rmax"   value="267*cm"/>
-    <constant name="pHCal_numLayers"   value="51"/>
+    <constant name="pHCal_ECCE_numSteelScLayers"   value="60"/>
+    <constant name="pHCal_ECCE_numTungstenScLayers"   value="9"/>
+    <constant name="pHCal_ATHENA_numSteelScLayers"   value="50"/>
 
     <constant name="pECalInsert_zmin"     value="350*cm"/>
     <constant name="pECalInsert_xpos"     value="-10*cm"/>
