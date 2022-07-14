@@ -1,5 +1,7 @@
 # eic_endcap_insert
 
+[![DOI](https://zenodo.org/badge/491633889.svg)](https://zenodo.org/badge/latestdoi/491633889)
+
 Running the standalone simulation
 ---------------------------------
 Enter the EIC container and source the default enviroment. Then do the following:
