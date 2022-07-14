@@ -1,17 +1,17 @@
-cff-version: 1.1.0
+cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Milton"
-    given-names: "Ryan"
-    orcid: " https://orcid.org/0000-0001-8275-0662"
+  given-names: "Ryan"
+  orcid: " https://orcid.org/0000-0001-8275-0662"
 - family-names: "Schmookler"
-    given-names: "Barak"
+  given-names: "Barak"
 - family-names: "Ji"
-    given-names: "Zhongling"
+  given-names: "Zhongling"
 - family-names: "Karki"
-    given-names: "Bishnu"
+  given-names: "Bishnu"
 - family-names: "Paul"
-    given-names: "Sebouh"
+  given-names: "Sebouh"
 title: "EIC pEndcap Insert in DD4hep"
 version: v1.0.0
 doi: 10.5281/zenodo.6836014
