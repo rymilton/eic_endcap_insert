@@ -86,13 +86,11 @@
           sensitive="true"
         /> 
       </layer>
-      <comment> z here is a dummy -- insert cut-out will just be the length of the pHCal </comment>
       <insert>
         <position x="pECalInsert_xpos" y="0" z = "0" />
         <dimensions
           x="pECalInsert_xtotal"
           y="pECalInsert_ytotal"
-          z="0"
         />
       </insert>
     </detector>
