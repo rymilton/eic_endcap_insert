@@ -23,7 +23,7 @@ Float_t reco(Float_t E0, TRandom *rnd)
     return 0;
   }
   else
-  { 
+  {
     Float_t a = 0.1;
     Float_t b = 0.0015;
     Float_t sigma =  E0 * TMath::Sqrt(a*a/E0 + b*b);
@@ -54,10 +54,9 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
   const Int_t nd = 5;
   const Int_t nb = 1;
   const Int_t nin = (2*nb+1)*(2*nb+1);
-  const Int_t nout = 2;
   Int_t ntruth;
   array<Float_t, nin> v_in;
-  array<Float_t, nout> v_out;
+  Float_t pout;
 
   file_name.Form("%s/histos/training-%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto f_out = new TFile(file_name, "RECREATE");
@@ -65,8 +64,7 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
   t_data->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
     t_data->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
-  for(Int_t i=0; i<nout; i++)
-    t_data->Branch(Form("n%d", i+1), &v_out[i], Form("n%d/F", i+1));
+  t_data->Branch("p", &pout, "p/F");
 
   auto h2_e = new TH2F("h2_e", "Energy;x;y", 2*nd+1,-nd-0.5,nd+0.5, 2*nd+1,-nd-0.5,nd+0.5);
 
@@ -88,47 +86,43 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
   {
     events->GetEntry(iev);
 
+    ntruth = 0;
     Int_t imcg[ntrack];
-    Int_t ng = 0;
     for(Int_t imc = 2; imc < events->GetLeaf("MCParticles.PDG")->GetLen(); imc++)
       if(pid[imc] == 22)
-        imcg[ng++] = imc;
+        imcg[ntruth++] = imc;
 
-    if(ng <= 0 || ng > 2)
+    if(ntruth <= 0 || ntruth > 2)
       continue;
 
-    if(ng == 2 && point_dis(mc_x[imcg[0]], mc_y[imcg[0]], mc_x[imcg[1]], mc_y[imcg[1]]) > 2.*tsize)
-      ntruth = 1;
-    else
-      ntruth = ng;
+    if(ntruth == 2 && point_dis(mc_x[imcg[0]], mc_y[imcg[0]], mc_x[imcg[1]], mc_y[imcg[1]]) > 1.5*tsize)
+      continue;
 
-    for(Int_t ig=0; ig<ng; ig++)
+    v_in.fill(0.);
+    pout = ntruth - 1;
+
+    Float_t sum_in = 0.;
+    Int_t nhit = events->GetLeaf("EcalEndcapPHits.energy")->GetLen();
+    Int_t ip = distance(hit_e, max_element(hit_e, hit_e+nhit));
+    for(Int_t ihit = 0; ihit < nhit; ihit++)
     {
-      v_in.fill(0.);
-      v_out.fill(0.);
-      v_out[ntruth-1] = 1.;
-
-      Float_t sum_in = 0.;
-      for(Long64_t ihit = 0; ihit < events->GetLeaf("EcalEndcapPHits.energy")->GetLen(); ihit++)
+      Int_t ix = round((hit_x[ihit] - hit_x[ip]) / tsize_x);
+      Int_t iy = round((hit_y[ihit] - hit_y[ip]) / tsize_y);
+      Float_t ereco = reco(hit_e[ihit]*1e3, rnd);
+      h2_e->Fill(ix, iy, ereco);
+      if(abs(ix) <= nb && abs(iy) <= nb)
       {
-        Int_t ix = round((hit_x[ihit] - mc_x[imcg[ig]]) / tsize_x);
-        Int_t iy = round((hit_y[ihit] - mc_y[imcg[ig]]) / tsize_y);
-        Float_t ereco = reco(hit_e[ihit], rnd);
-        h2_e->Fill(ix, iy, ereco);
-        if(abs(ix) <= nb && abs(iy) <= nb)
-        {
-          v_in[(ix+nb)*(2*nb+1)+(iy+nb)] = ereco;
-          sum_in += ereco;
-        }
-      } // ihit
+        v_in[(ix+nb)*(2*nb+1)+(iy+nb)] = ereco;
+        sum_in += ereco;
+      }
+    } // ihit
 
-      if(sum_in > 0.)
-        for(Int_t i=-nb; i<=nb; i++)
-          for(Int_t j=-nb; j<=nb; j++)
-            v_in[(i+nb)*(2*nb+1)+(j+nb)] /= sum_in;
+    if(sum_in > 0.)
+      for(Int_t i=-nb; i<=nb; i++)
+        for(Int_t j=-nb; j<=nb; j++)
+          v_in[(i+nb)*(2*nb+1)+(j+nb)] /= sum_in;
 
-      t_data->Fill();
-    } // ig
+    t_data->Fill();
   } // iev
 
   f_out->Write();

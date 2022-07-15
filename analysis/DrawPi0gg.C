@@ -6,17 +6,19 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TH2.h>
+#include <TGraph.h>
 #include <TMultiLayerPerceptron.h>
 #include <TCanvas.h>
 #include <TStyle.h>
+#include <TLegend.h>
 
 using namespace std;
 
-void DrawPi0gg()
+void DrawPi0gg(Double_t energy)
 {
   const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
-  file_name.Form("%s/histos/training.root", data_dir);
+  file_name.Form("%s/histos/training-%gGeV_theta_15_20deg.root", data_dir, energy);
   auto f = new TFile(file_name);
   if(!f || !f->IsOpen())
   {
@@ -31,17 +33,15 @@ void DrawPi0gg()
   const Int_t nd = 5;
   const Int_t nb = 1;
   const Int_t nin = (2*nb+1)*(2*nb+1);
-  const Int_t nout = 2;
   Int_t ntruth;
   array<Float_t, nin> v_in;
-  array<Float_t, nout> v_out;
+  Float_t pout;
 
   auto t_data = (TTree*)f->Get("T");
   t_data->SetBranchAddress("ntruth", &ntruth);
   for(Int_t i=0; i<nin; i++)
     t_data->SetBranchAddress(Form("e%d", i+1), &v_in[i]);
-  for(Int_t i=0; i<nout; i++)
-    t_data->SetBranchAddress(Form("n%d", i+1), &v_out[i]);
+  t_data->SetBranchAddress("p", &pout);
 
   auto h2_e = (TH2*)f->Get("h2_e");
 
@@ -52,28 +52,66 @@ void DrawPi0gg()
   string str_node = "e1";
   for(Int_t i=1; i<nin; i++)
     str_node += Form(",e%d", i+1);
-  str_node += Form(":%d:n1,n2!", nin+5);
+  str_node += Form(":%d:p!", nin+6);
 
   auto mlp = new TMultiLayerPerceptron(
       str_node.c_str(),
-      t_data, "Entry$%10!=0", "Entry$%10==0");
+      t_data, "Entry$%2==0", "Entry$%2!=0");
 
   // Use kStochastic, kBatch doesn't work
   mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
   mlp->Train(10, "text, graph, update=1");
 
-  Long64_t ntrain = t_data->GetEntries();
-  Long64_t correct = 0;
-  for(Long64_t ien = 0; ien < ntrain; ien++)
+  const Int_t nbins = 100;
+  TH1 *h_p[2];
+  TGraph *g_eff[2];
+  for(Int_t ig=0; ig<3; ig++)
+  {
+    h_p[ig] = new TH1F(Form("h_p_%d",ig), "p", nbins,0.,1.);
+    g_eff[ig] = new TGraph(nbins);
+    g_eff[ig]->SetName(Form("g_eff_%d",ig));
+  }
+
+  for(Long64_t ien=1; ien<t_data->GetEntries(); ien+=2)
   {
     t_data->GetEntry(ien);
     array<Double_t, nin> v_inf;
     copy(v_in.begin(), v_in.end(), v_inf.begin());
-    Double_t n1 = mlp->Evaluate(0, v_inf.begin());
-    Double_t n2 = mlp->Evaluate(1, v_inf.begin());
-    Int_t npred = n1 > n2 ? 1 : 2;
-    if(npred == ntruth)
-      correct++;
+    Float_t pinf = mlp->Evaluate(0, v_inf.begin());
+    h_p[ntruth-1]->Fill(pinf);
   }
-  cout << "correct/event = " << correct << "/" << ntrain << " (" << 100.*correct/ntrain << "%)" << endl;
+
+  Float_t n_total[2];
+  for(Int_t ig=0; ig<2; ig++)
+    n_total[ig] = h_p[ig]->Integral(1, nbins);
+
+  for(Int_t ib=0; ib<nbins; ib++)
+  {
+    Float_t p = h_p[0]->GetXaxis()->GetBinCenter(1+ib);
+    Float_t n_eff[2];
+    for(Int_t ig=0; ig<2; ig++)
+    {
+      n_eff[ig] = h_p[ig]->Integral(1+ib, nbins);
+      g_eff[ig]->SetPoint(ib, p, n_eff[ig]/n_total[ig]);
+    }
+    Float_t sb = n_eff[1] / sqrt(n_eff[0] + n_eff[1]) / sqrt(n_total[1]);
+    g_eff[2]->SetPoint(ib, p, sb);
+  }
+
+  auto c1 = new TCanvas("c1", "c1", 600, 600);
+  auto leg0 = new TLegend(0.2, 0.2);
+  const char *leg0_text[3] = {"BG eff", "Sig eff", "S/#sqrt{S+B}"};
+  for(Int_t ig=0; ig<3; ig++)
+  {
+    g_eff[ig]->SetTitle("Efficiency for #pi^{0}");
+    g_eff[ig]->GetXaxis()->SetTitle("Cut value");
+    g_eff[ig]->GetYaxis()->SetTitle("Efficiency");
+    g_eff[ig]->SetLineStyle(20+ig);
+    g_eff[ig]->SetLineColor(1+ig);
+    g_eff[ig]->SetLineWidth(2);
+    g_eff[ig]->Draw(ig==0?"AL":"L");
+    leg0->AddEntry(Form("g_eff_%d",ig), leg0_text[ig], "L");
+  }
+  leg0->Draw();
+  c1->Print("results/Pi0gg.pdf");
 }
