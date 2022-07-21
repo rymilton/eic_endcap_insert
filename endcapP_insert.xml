@@ -32,7 +32,6 @@
   <include ref="compact/ecal_forward_homogeneous.xml"/>
 
   <comment> Including the pHCal </comment>
-  <comment> Must be included after pHCalInsert </comment>
   <comment> Change to compact/hcal_ECCE.xml for ECCE pHCal</comment>
   <!--include ref="compact/hcal_ATHENA.xml"/-->
 

@@ -91,7 +91,6 @@
         <dimensions
           x="pECalInsert_xtotal"
           y="pECalInsert_ytotal"
-          z="pECalInsert_LayerThickness*pECalInsert_numLayers"
         />
       </insert>
     </detector>

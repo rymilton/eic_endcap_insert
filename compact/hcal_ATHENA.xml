@@ -67,7 +67,7 @@
           vis="Invisible"
         />
       </layer>
-      <comment> Final layer of steel </comment>
+      <comment> Final layer of absorber </comment>
       <layer 
         repeat="1"
         thickness = "pHCal_AbsorberThickness"
@@ -83,7 +83,6 @@
         <dimensions
           x="pHCalInsert_xtotal"
           y="pHCalInsert_ytotal"
-          z="pHCalInsert_LayerThickness*pHCalInsert_numLayers"
         />
       </insert>
     </detector>
