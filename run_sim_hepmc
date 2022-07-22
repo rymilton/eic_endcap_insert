@@ -2,12 +2,13 @@
 
 # Input simulation parameters
 particle="pi-"
-beam_energy=40
+beam_energy=50
 num_events=1000
 theta_min=2.83 # in degrees
 theta_max=2.83 # in degrees
 phi_min=0. # in degrees
 phi_max=360. # in degrees 
+physics_list="FTFP_BERT_HP"
 
 # Output file names
 info_string="${particle}_${beam_energy}GeV_theta_${theta}deg"
@@ -30,6 +31,7 @@ ${beam_energy})"
 npsim \
    --compactFile endcapP_insert.xml \
    --numberOfEvents ${num_events} \
+   --physicsList ${physics_list} \
    --inputFiles ${hepmcfile} \
    --outputFile ${simfile}  || exit
    
