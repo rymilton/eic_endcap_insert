@@ -4,7 +4,7 @@
 
 Getting started
 ---------------------------------
-Enter the EIC container ([installation instructions](https://eic.phy.anl.gov/tutorials/eic_tutorial/getting-started/quickstart/)) and source the default enviroment (`source /opt/detector/setup.sh`). Go to the directory containing your EIC container.
+Enter the EIC container hom([installation instructions](https://eic.phy.anl.gov/tutorials/eic_tutorial/getting-started/quickstart/)) and source the default enviroment (`source /opt/detector/setup.sh`). Go to the directory containing your EIC container.
 ## Installation instructions
 
 If you don't have them already, get the latest ip6 files and install them:
@@ -28,7 +28,7 @@ make install
 Make sure IP6 and this repository have the same install prefix.
 
 ## Editing the simulation
-By default, the simulation includes the HCal insert (W/Sc + Steel/Sc), ECal insert (homogenous W/ScFi material), HCal (ATHENA: 20/3 mm Steel/Sc), ECal (homogenous W/ScFi material), and the beampipe. To change what detectors are simulated, simply comment out the undesired ones in `endcapP_insert.xml`.
+By default, the simulation includes the HCal insert (W/Sc + Steel/Sc), ECal insert (homogeneous W/ScFi material), HCal (ATHENA: 20/3 mm Steel/Sc), ECal (homogeneous W/ScFi material), and the beampipe. To change what detectors are simulated, simply comment out the undesired ones in `endcapP_insert.xml`.
 
 Some simple parameters for the geometry are contained in `compact/configuration_default.xml`. If you want to simulate without a beampipe and hole, replace `<include ref="compact/configuration_default.xml"/>` with `<include ref="compact/configuration_nohole.xml"/>` and comment out `<include ref="ip6/central_beampipe.xml"/>` in `endcapP_insert.xml`.
 
