@@ -32,7 +32,7 @@ By default, the simulation includes the HCal insert (W/Sc + Steel/Sc), ECal inse
 
 Some simple parameters for the geometry are contained in `compact/configuration_default.xml`. If you want to simulate without a beampipe and hole, replace `<include ref="compact/configuration_default.xml"/>` with `<include ref="compact/configuration_nohole.xml"/>` and comment out `<include ref="ip6/central_beampipe.xml"/>` in `endcapP_insert.xml`.
 
-### NOTE: If you adjust any compact or src files, you need to `make install` in your build directory before running the simulation.
+#### NOTE: If you adjust any compact or src files, you need to `make install` in your build directory before running the simulation.
 
 ## Running the simulation
 `run_sim_hepmc` generates a HepMC file and feeds it to npsim and DD4hep. The resulting sim file is then sent through Juggler for digitization and reconstruction. The sim and reco files are saved. 
@@ -41,7 +41,7 @@ Some basic, adjustable paramaters are listed at the top of `run_sim_hepmc`.
 
 To run the simulation, use `./run_sim_hepmc`
 
-### NOTE: If you remove any detector components from the simulation, you must also comment out the related lines in `endcapP_insert_reco.py`
+#### NOTE: If you remove any detector components from the simulation, you must also comment out the related lines in `endcapP_insert_reco.py`
 
 ## Output
 There will be two output files: a sim file and a reco file. The sim file contains the Geant4 level information while the reco file contains the digitized and reconstructed information. Both contain information about the MCParticles. As a collaboration, we typically use the branches ending in HitsReco. 
