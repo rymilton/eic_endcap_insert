@@ -14,7 +14,7 @@
 
 using namespace std;
 
-void DrawPi0gg(Double_t energy)
+void DrawPi0gg(Double_t energy = 60.)
 {
   const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
@@ -37,11 +37,47 @@ void DrawPi0gg(Double_t energy)
   array<Float_t, nin> v_in;
   Float_t pout;
 
-  auto t_data = (TTree*)f->Get("T");
-  t_data->SetBranchAddress("ntruth", &ntruth);
+  auto rnd = new TRandom3(0);
+
+  //auto t_data = (TTree*)f->Get("T");
+  //t_data->SetBranchAddress("ntruth", &ntruth);
+  //for(Int_t i=0; i<nin; i++)
+  //  t_data->SetBranchAddress(Form("e%d", i+1), &v_in[i]);
+  //t_data->SetBranchAddress("p", &pout);
+
+  auto t_data = new TTree("T", "Training data");
+  t_data->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
-    t_data->SetBranchAddress(Form("e%d", i+1), &v_in[i]);
-  t_data->SetBranchAddress("p", &pout);
+    t_data->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
+  t_data->Branch("p", &pout, "p/F");
+
+  //auto f_g = new TFile(Form("%s/histos/g.root", data_dir));
+  //auto t_g = (TTree*)f_g->Get("treeML");
+  auto f_g = new TFile(Form("%s/histos/training-gamma_60GeV_theta_15_20deg-0.root", data_dir));
+  auto t_g = (TTree*)f_g->Get("T");
+  for(Int_t i=0; i<nin; i++)
+    t_g->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
+
+  //auto f_pi0 = new TFile(Form("%s/histos/pi0.root", data_dir));
+  //auto t_pi0 = (TTree*)f_pi0->Get("treeML");
+  auto f_pi0 = new TFile(Form("%s/histos/training-pi0_60GeV_theta_15_20deg-0.root", data_dir));
+  auto t_pi0 = (TTree*)f_pi0->Get("T");
+  for(Int_t i=0; i<nin; i++)
+    t_pi0->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
+
+  Int_t ig = 0;
+  Int_t ipi = 0;
+  for(Long64_t ien = 0; ien < 2000; ien++)
+  {
+    v_in.fill(0.);
+    ntruth = rnd->Integer(2) + 1;
+    if(ntruth == 1 && ig < 1000)
+      t_g->GetEntry(ig++);
+    else
+      t_pi0->GetEntry(ipi++);
+    pout = 2 - ntruth;
+    t_data->Fill();
+  }
 
   auto h2_e = (TH2*)f->Get("h2_e");
 
@@ -58,9 +94,8 @@ void DrawPi0gg(Double_t energy)
       str_node.c_str(),
       t_data, "Entry$%2==0", "Entry$%2!=0");
 
-  // Use kStochastic, kBatch doesn't work
-  mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
-  mlp->Train(10, "text, graph, update=1");
+  mlp->SetLearningMethod(TMultiLayerPerceptron::kBFGS);
+  mlp->Train(600, "text, graph, update=100");
 
   const Int_t nbins = 100;
   TH1 *h_p[2];
@@ -94,7 +129,7 @@ void DrawPi0gg(Double_t energy)
       n_eff[ig] = h_p[ig]->Integral(1+ib, nbins);
       g_eff[ig]->SetPoint(ib, p, n_eff[ig]/n_total[ig]);
     }
-    Float_t sb = n_eff[1] / sqrt(n_eff[0] + n_eff[1]) / sqrt(n_total[1]);
+    Float_t sb = n_eff[0] / sqrt(n_eff[0] + n_eff[1]) / sqrt(n_total[0]);
     g_eff[2]->SetPoint(ib, p, sb);
   }
 

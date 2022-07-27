@@ -106,8 +106,7 @@ void ToyPi0gg(const Int_t nev = 10000)
       str_node.c_str(),
       t_data, "Entry$%2==0", "Entry$%2!=0");
 
-  // Use kStochastic, kBatch doesn't work
-  mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
+  mlp->SetLearningMethod(TMultiLayerPerceptron::kBFGS);
   mlp->Train(10, "text, graph, update=1");
 
   const Int_t nbins = 100;
