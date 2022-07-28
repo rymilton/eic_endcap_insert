@@ -19,7 +19,7 @@ using namespace std;
 template<class T> inline constexpr T square(const T &x) { return x*x; }
 template<class T> inline constexpr T point_dis(const T &x1, const T &y1, const T &x2, const T &y2) { return sqrt(square(x1-x2)+square(y1-y2)); }
 
-void ToyPi0gg(const Int_t nev = 10000)
+void ToyPi0gg(const Int_t nev = 2200)
 {
   const Int_t nd = 5;
   const Int_t nb = 1;
@@ -45,7 +45,7 @@ void ToyPi0gg(const Int_t nev = 10000)
     v_in.fill(0.);
 
     ntruth = rnd->Integer(2) + 1;
-    pout = ntruth - 1;
+    pout = 2 - ntruth;
 
     Float_t truth_x[2], truth_y[2], truth_peak[2];
     for(Int_t ig=0; ig<ntruth; ig++)
@@ -106,8 +106,8 @@ void ToyPi0gg(const Int_t nev = 10000)
       str_node.c_str(),
       t_data, "Entry$%2==0", "Entry$%2!=0");
 
-  mlp->SetLearningMethod(TMultiLayerPerceptron::kBFGS);
-  mlp->Train(10, "text, graph, update=1");
+  mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
+  mlp->Train(600, "text, graph, update=100");
 
   const Int_t nbins = 100;
   TH1 *h_p[2];
@@ -141,7 +141,7 @@ void ToyPi0gg(const Int_t nev = 10000)
       n_eff[ig] = h_p[ig]->Integral(1+ib, nbins);
       g_eff[ig]->SetPoint(ib, p, n_eff[ig]/n_total[ig]);
     }
-    Float_t sb = n_eff[1] / sqrt(n_eff[0] + n_eff[1]) / sqrt(n_total[1]);
+    Float_t sb = n_eff[0] / sqrt(n_eff[0] + n_eff[1]) / sqrt(n_total[0]);
     g_eff[2]->SetPoint(ib, p, sb);
   }
 
@@ -150,9 +150,10 @@ void ToyPi0gg(const Int_t nev = 10000)
   const char *leg0_text[3] = {"BG eff", "Sig eff", "S/#sqrt{S+B}"};
   for(Int_t ig=0; ig<3; ig++)
   {
-    g_eff[ig]->SetTitle("Efficiency for #pi^{0}");
+    g_eff[ig]->SetTitle("Efficiency for photon");
     g_eff[ig]->GetXaxis()->SetTitle("Cut value");
     g_eff[ig]->GetYaxis()->SetTitle("Efficiency");
+    g_eff[ig]->GetYaxis()->SetRangeUser(0., 1.);
     g_eff[ig]->SetLineStyle(20+ig);
     g_eff[ig]->SetLineColor(1+ig);
     g_eff[ig]->SetLineWidth(2);
@@ -160,5 +161,5 @@ void ToyPi0gg(const Int_t nev = 10000)
     leg0->AddEntry(Form("g_eff_%d",ig), leg0_text[ig], "L");
   }
   leg0->Draw();
-  c1->Print("results/ToyPi0gg.pdf");
+  c1->Print("results/ToyPi0gg-Stochastic-epoch600.pdf");
 }

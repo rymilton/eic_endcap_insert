@@ -35,7 +35,7 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
 {
   const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
-  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_18_18deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto data_file = new TFile(file_name);
   if(!data_file || !data_file->IsOpen())
   {
@@ -58,7 +58,7 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
   array<Float_t, nin> v_in;
   Float_t pout;
 
-  file_name.Form("%s/histos/training-%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  file_name.Form("%s/histos/training-%s_%gGeV_theta_18_18deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto f_out = new TFile(file_name, "RECREATE");
   auto t_data = new TTree("T", "Training data");
   t_data->Branch("ntruth", &ntruth, "ntruth/I");

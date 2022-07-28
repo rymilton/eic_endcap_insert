@@ -39,12 +39,6 @@ void DrawPi0gg(Double_t energy = 60.)
 
   auto rnd = new TRandom3(0);
 
-  //auto t_data = (TTree*)f->Get("T");
-  //t_data->SetBranchAddress("ntruth", &ntruth);
-  //for(Int_t i=0; i<nin; i++)
-  //  t_data->SetBranchAddress(Form("e%d", i+1), &v_in[i]);
-  //t_data->SetBranchAddress("p", &pout);
-
   auto t_data = new TTree("T", "Training data");
   t_data->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
@@ -53,25 +47,27 @@ void DrawPi0gg(Double_t energy = 60.)
 
   //auto f_g = new TFile(Form("%s/histos/g.root", data_dir));
   //auto t_g = (TTree*)f_g->Get("treeML");
-  auto f_g = new TFile(Form("%s/histos/training-gamma_60GeV_theta_15_20deg-0.root", data_dir));
+  auto f_g = new TFile(Form("%s/histos/training-gamma_60GeV_theta_18_18deg.root", data_dir));
   auto t_g = (TTree*)f_g->Get("T");
   for(Int_t i=0; i<nin; i++)
     t_g->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
 
   //auto f_pi0 = new TFile(Form("%s/histos/pi0.root", data_dir));
   //auto t_pi0 = (TTree*)f_pi0->Get("treeML");
-  auto f_pi0 = new TFile(Form("%s/histos/training-pi0_60GeV_theta_15_20deg-0.root", data_dir));
+  auto f_pi0 = new TFile(Form("%s/histos/training-pi0_60GeV_theta_18_18deg.root", data_dir));
   auto t_pi0 = (TTree*)f_pi0->Get("T");
   for(Int_t i=0; i<nin; i++)
     t_pi0->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
 
   Int_t ig = 0;
   Int_t ipi = 0;
-  for(Long64_t ien = 0; ien < 2000; ien++)
+  for(Long64_t ien = 0; ien < 1900; ien++)
   {
     v_in.fill(0.);
     ntruth = rnd->Integer(2) + 1;
-    if(ntruth == 1 && ig < 1000)
+    if(ig > 990) ntruth = 2;
+    if(ipi > 970) ntruth = 1;
+    if(ntruth == 1)
       t_g->GetEntry(ig++);
     else
       t_pi0->GetEntry(ipi++);
@@ -94,7 +90,7 @@ void DrawPi0gg(Double_t energy = 60.)
       str_node.c_str(),
       t_data, "Entry$%2==0", "Entry$%2!=0");
 
-  mlp->SetLearningMethod(TMultiLayerPerceptron::kBFGS);
+  mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
   mlp->Train(600, "text, graph, update=100");
 
   const Int_t nbins = 100;
@@ -138,9 +134,10 @@ void DrawPi0gg(Double_t energy = 60.)
   const char *leg0_text[3] = {"BG eff", "Sig eff", "S/#sqrt{S+B}"};
   for(Int_t ig=0; ig<3; ig++)
   {
-    g_eff[ig]->SetTitle("Efficiency for #pi^{0}");
+    g_eff[ig]->SetTitle("Efficiency for photon");
     g_eff[ig]->GetXaxis()->SetTitle("Cut value");
     g_eff[ig]->GetYaxis()->SetTitle("Efficiency");
+    g_eff[ig]->GetYaxis()->SetRangeUser(0., 1.);
     g_eff[ig]->SetLineStyle(20+ig);
     g_eff[ig]->SetLineColor(1+ig);
     g_eff[ig]->SetLineWidth(2);
@@ -148,5 +145,5 @@ void DrawPi0gg(Double_t energy = 60.)
     leg0->AddEntry(Form("g_eff_%d",ig), leg0_text[ig], "L");
   }
   leg0->Draw();
-  c1->Print("results/Pi0gg.pdf");
+  c1->Print("results/Pi0gg-18deg-Stochastic-epoch600.pdf");
 }

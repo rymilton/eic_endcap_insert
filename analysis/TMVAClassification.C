@@ -202,14 +202,14 @@ int TMVAClassification( TString myMethodList = "" )
   //   TFile *fbg = new TFile("../athena/emc/pi0.root");
   //TFile *fsg = new TFile("../emc/g.root"); // Produced by emc.cc
   //TFile *fbg = new TFile("../emc/pi0.root");
-  TFile *fsg = new TFile("/gpfs/mnt/gpfs02/sphenix/user/shura/athena/emc/g.root"); // Produced by emc.cc
-  TFile *fbg = new TFile("/gpfs/mnt/gpfs02/sphenix/user/shura/athena/emc/pi0.root");
-  TTree *signalTree     = (TTree*)fsg->Get("treeML");
-  TTree *background     = (TTree*)fbg->Get("treeML");
-  //TFile *fsg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-gamma_60GeV_theta_15_20deg.root"); // Produced by emc.cc
-  //TFile *fbg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-pi0_60GeV_theta_15_20deg-0.root");
-  //TTree *signalTree     = (TTree*)fsg->Get("T");
-  //TTree *background     = (TTree*)fbg->Get("T");
+  //TFile *fsg = new TFile("/gpfs/mnt/gpfs02/sphenix/user/shura/athena/emc/g.root"); // Produced by emc.cc
+  //TFile *fbg = new TFile("/gpfs/mnt/gpfs02/sphenix/user/shura/athena/emc/pi0.root");
+  //TTree *signalTree     = (TTree*)fsg->Get("treeML");
+  //TTree *background     = (TTree*)fbg->Get("treeML");
+  TFile *fsg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-gamma_60GeV_theta_15_20deg.root"); // Produced by emc.cc
+  TFile *fbg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-pi0_60GeV_theta_15_20deg.root");
+  TTree *signalTree     = (TTree*)fsg->Get("T");
+  TTree *background     = (TTree*)fbg->Get("T");
 
   // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
   TString outfileName( "TMVA.root" );
@@ -479,7 +479,7 @@ int TMVAClassification( TString myMethodList = "" )
     factory->BookMethod( dataloader, TMVA::Types::kMLP, "MLPBFGS", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:!UseRegulator" );
 
   if (Use["MLPBNN"])
-    factory->BookMethod( dataloader, TMVA::Types::kMLP, "MLPBNN", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=60:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:UseRegulator" ); // BFGS training with bayesian regulators
+    factory->BookMethod( dataloader, TMVA::Types::kMLP, "MLPBNN", "H:!V:NeuronType=tanh:VarTransform=N:NCycles=600:HiddenLayers=N+5:TestRate=5:TrainingMethod=BFGS:UseRegulator" ); // BFGS training with bayesian regulators
 
 
   // Multi-architecture DNN implementation.
