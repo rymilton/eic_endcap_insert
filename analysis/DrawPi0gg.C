@@ -5,7 +5,6 @@
 #include <TString.h>
 #include <TFile.h>
 #include <TTree.h>
-#include <TH2.h>
 #include <TGraph.h>
 #include <TMultiLayerPerceptron.h>
 #include <TCanvas.h>
@@ -14,81 +13,61 @@
 
 using namespace std;
 
-void DrawPi0gg(Double_t energy = 60.)
+void DrawPi0gg(Double_t energy = 80.)
 {
-  const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
-  TString file_name;
-  file_name.Form("%s/histos/training-%gGeV_theta_15_20deg.root", data_dir, energy);
-  auto f = new TFile(file_name);
-  if(!f || !f->IsOpen())
-  {
-    cerr << "Error opening file " << file_name << endl;
-    return;
-  }
-  else
-  {
-    cout << "Opening " << file_name << endl;
-  }
-
   const Int_t nd = 5;
   const Int_t nb = 1;
   const Int_t nin = (2*nb+1)*(2*nb+1);
   Int_t ntruth;
   array<Float_t, nin> v_in;
-  Float_t pout;
+  Float_t center_x, center_y, pout;
 
   auto rnd = new TRandom3(0);
 
+  auto f_data = new TFile("results/training-data.root", "RECREATE");
   auto t_data = new TTree("T", "Training data");
   t_data->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
     t_data->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
+  t_data->Branch("center_x", &center_x, "center_x/F");
+  t_data->Branch("center_y", &center_y, "center_y/F");
   t_data->Branch("p", &pout, "p/F");
 
-  //auto f_g = new TFile(Form("%s/histos/g.root", data_dir));
-  //auto t_g = (TTree*)f_g->Get("treeML");
-  auto f_g = new TFile(Form("%s/histos/training-gamma_60GeV_theta_18_18deg.root", data_dir));
-  auto t_g = (TTree*)f_g->Get("T");
-  for(Int_t i=0; i<nin; i++)
-    t_g->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
+  const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
+  const char *particle[2] = {"gamma", "pi0"};
+  TTree *t_input[2];
+  Long64_t nen[2] = {};
+  for(Int_t it=0; it<2; it++)
+  {
+    auto f_input = new TFile(Form("%s/histos/training-%s_%gGeV_theta_15_20deg.root", data_dir, particle[it], energy));
+    t_input[it] = (TTree*)f_input->Get("T");
+    nen[it] = t_input[it]->GetEntries();
+    for(Int_t i=0; i<nin; i++)
+      t_input[it]->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
+    t_input[it]->SetBranchAddress("center_x", &center_x);
+    t_input[it]->SetBranchAddress("center_y", &center_y);
+  }
 
-  //auto f_pi0 = new TFile(Form("%s/histos/pi0.root", data_dir));
-  //auto t_pi0 = (TTree*)f_pi0->Get("treeML");
-  auto f_pi0 = new TFile(Form("%s/histos/training-pi0_60GeV_theta_18_18deg.root", data_dir));
-  auto t_pi0 = (TTree*)f_pi0->Get("T");
-  for(Int_t i=0; i<nin; i++)
-    t_pi0->SetBranchAddress(Form("e%d",i+1), &v_in[i]);
-
-  Int_t ig = 0;
-  Int_t ipi = 0;
-  for(Long64_t ien = 0; ien < 1900; ien++)
+  Long64_t ien[2] = {};
+  while(ien[0]+ien[1] < nen[0]+nen[1])
   {
     v_in.fill(0.);
     ntruth = rnd->Integer(2) + 1;
-    if(ig > 990) ntruth = 2;
-    if(ipi > 970) ntruth = 1;
-    if(ntruth == 1)
-      t_g->GetEntry(ig++);
-    else
-      t_pi0->GetEntry(ipi++);
+    if(ien[0] >= nen[0]) ntruth = 2;
+    else if(ien[1] >= nen[1]) ntruth = 1;
+    t_input[ntruth-1]->GetEntry(ien[ntruth-1]++);
     pout = 2 - ntruth;
     t_data->Fill();
   }
 
-  auto h2_e = (TH2*)f->Get("h2_e");
-
-  auto c0 = new TCanvas("c0", "c0", 600, 600);
-  gStyle->SetOptStat(0);
-  h2_e->Draw("COLZ");
-
-  string str_node = "e1";
+  string str_node = "center_x,center_y,e1";
   for(Int_t i=1; i<nin; i++)
     str_node += Form(",e%d", i+1);
   str_node += Form(":%d:p!", nin+6);
 
   auto mlp = new TMultiLayerPerceptron(
       str_node.c_str(),
-      t_data, "Entry$%2==0", "Entry$%2!=0");
+      t_data, "Entry$%2!=0", "Entry$%2==0");
 
   mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
   mlp->Train(600, "text, graph, update=100");
@@ -103,7 +82,7 @@ void DrawPi0gg(Double_t energy = 60.)
     g_eff[ig]->SetName(Form("g_eff_%d",ig));
   }
 
-  for(Long64_t ien=1; ien<t_data->GetEntries(); ien+=2)
+  for(Long64_t ien=0; ien<t_data->GetEntries(); ien+=2)
   {
     t_data->GetEntry(ien);
     array<Double_t, nin> v_inf;
@@ -129,7 +108,7 @@ void DrawPi0gg(Double_t energy = 60.)
     g_eff[2]->SetPoint(ib, p, sb);
   }
 
-  auto c1 = new TCanvas("c1", "c1", 600, 600);
+  auto c0 = new TCanvas("c0", "c0", 600, 600);
   auto leg0 = new TLegend(0.2, 0.2);
   const char *leg0_text[3] = {"BG eff", "Sig eff", "S/#sqrt{S+B}"};
   for(Int_t ig=0; ig<3; ig++)
@@ -145,5 +124,5 @@ void DrawPi0gg(Double_t energy = 60.)
     leg0->AddEntry(Form("g_eff_%d",ig), leg0_text[ig], "L");
   }
   leg0->Draw();
-  c1->Print("results/Pi0gg-18deg-Stochastic-epoch600.pdf");
+  c0->Print("results/Pi0gg-15_20deg-Stochastic-80GeV-xy.pdf");
 }

@@ -117,8 +117,8 @@ int TMVAClassification( TString myMethodList = "" )
   //
   // Neural Networks (all are feed-forward Multilayer Perceptrons)
   Use["MLP"]             = 1; // Recommended ANN
-  Use["MLPBFGS"]         = 1; // Recommended ANN with optional training method
-  Use["MLPBNN"]          = 1; // Recommended ANN with BFGS training method and bayesian regulator
+  Use["MLPBFGS"]         = 0; // Recommended ANN with optional training method
+  Use["MLPBNN"]          = 0; // Recommended ANN with BFGS training method and bayesian regulator
   Use["CFMlpANN"]        = 0; // Depreciated ANN from ALEPH
   Use["TMlpANN"]         = 0; // ROOT's own ANN
 #ifdef R__HAS_TMVAGPU
@@ -206,13 +206,13 @@ int TMVAClassification( TString myMethodList = "" )
   //TFile *fbg = new TFile("/gpfs/mnt/gpfs02/sphenix/user/shura/athena/emc/pi0.root");
   //TTree *signalTree     = (TTree*)fsg->Get("treeML");
   //TTree *background     = (TTree*)fbg->Get("treeML");
-  TFile *fsg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-gamma_60GeV_theta_15_20deg.root"); // Produced by emc.cc
-  TFile *fbg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-pi0_60GeV_theta_15_20deg.root");
+  TFile *fsg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-gamma_80GeV_theta_15_20deg.root"); // Produced by emc.cc
+  TFile *fbg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-pi0_80GeV_theta_15_20deg.root");
   TTree *signalTree     = (TTree*)fsg->Get("T");
   TTree *background     = (TTree*)fbg->Get("T");
 
   // Create a ROOT output file where TMVA will store ntuples, histograms, etc.
-  TString outfileName( "TMVA.root" );
+  TString outfileName( "results/TMVA.root" );
   TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
 
   // Create the factory object. Later you can choose the methods
@@ -254,6 +254,8 @@ int TMVAClassification( TString myMethodList = "" )
   dataloader->AddVariable( "e7", 'F' );
   dataloader->AddVariable( "e8", 'F' );
   dataloader->AddVariable( "e9", 'F' );
+  dataloader->AddVariable( "center_x", 'F' );
+  dataloader->AddVariable( "center_y", 'F' );
 
   /*
      dataloader->AddVariable( "e1+e2+e3+e4", 'F' );
@@ -339,7 +341,8 @@ int TMVAClassification( TString myMethodList = "" )
   //    dataloader->PrepareTrainingAndTestTree( mycut,
   //         "NSigTrain=3000:NBkgTrain=3000:NSigTest=3000:NBkgTest=3000:SplitMode=Random:!V" );
   dataloader->PrepareTrainingAndTestTree( mycuts, mycutb,
-      "nTrain_Signal=1000:nTrain_Background=1000:SplitMode=Random:NormMode=NumEvents:!V" );
+      //"nTrain_Signal=1000:nTrain_Background=1000:SplitMode=Random:NormMode=NumEvents:!V" );
+      "nTest_Signal=1000:nTest_Background=1000:SplitMode=Random:NormMode=NumEvents:!V" );
 
   // ### Book MVA methods
   //

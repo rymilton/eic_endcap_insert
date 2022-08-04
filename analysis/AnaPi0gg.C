@@ -31,11 +31,11 @@ Float_t reco(Float_t E0, TRandom *rnd)
   }
 }
 
-void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
+void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
 {
   const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
-  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_18_18deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto data_file = new TFile(file_name);
   if(!data_file || !data_file->IsOpen())
   {
@@ -56,14 +56,16 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
   const Int_t nin = (2*nb+1)*(2*nb+1);
   Int_t ntruth;
   array<Float_t, nin> v_in;
-  Float_t pout;
+  Float_t center_x, center_y, pout;
 
-  file_name.Form("%s/histos/training-%s_%gGeV_theta_18_18deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  file_name.Form("%s/histos/training-%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
   auto f_out = new TFile(file_name, "RECREATE");
   auto t_data = new TTree("T", "Training data");
   t_data->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
     t_data->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
+  t_data->Branch("center_x", &center_x, "center_x/F");
+  t_data->Branch("center_y", &center_y, "center_y/F");
   t_data->Branch("p", &pout, "p/F");
 
   auto h2_e = new TH2F("h2_e", "Energy;x;y", 2*nd+1,-nd-0.5,nd+0.5, 2*nd+1,-nd-0.5,nd+0.5);
@@ -99,11 +101,13 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "pi0")
       continue;
 
     v_in.fill(0.);
-    pout = ntruth - 1;
+    pout = 2 - ntruth;
 
     Float_t sum_in = 0.;
     Int_t nhit = events->GetLeaf("EcalEndcapPHits.energy")->GetLen();
     Int_t ip = distance(hit_e, max_element(hit_e, hit_e+nhit));
+    center_x = hit_x[ip] / tsize_x;
+    center_y = hit_y[ip] / tsize_y;
     for(Int_t ihit = 0; ihit < nhit; ihit++)
     {
       Int_t ix = round((hit_x[ihit] - hit_x[ip]) / tsize_x);

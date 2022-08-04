@@ -1,9 +1,9 @@
 #!/bin/bash
 
-j=$(( $1 % 10 ))
-k=$(( $1 / 10 ))
+j=$(( $1 % 100 ))
+k=$(( $1 / 100 ))
 particle=$2
-energies=(60 80 100)
+energies=(80)
 beam_energy=${energies[$k]}
 
 mkdir -p $SPIN/data/eic/histos
