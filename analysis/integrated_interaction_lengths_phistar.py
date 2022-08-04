@@ -5,7 +5,12 @@ if (len(sys.argv)!=3):
     exit()
 xml_file=sys.argv[1]
 eta = float(sys.argv[2])
-tilt=.025
+
+useTilt=False
+if useTilt:
+    tilt=-.025
+else:
+    tilt = 0
 
 
 
@@ -17,9 +22,9 @@ for theta in [2*np.arctan(np.exp(-eta))]:
         uxp = np.sin(theta)*np.cos(phi)
         uyp = np.sin(theta)*np.sin(phi)
         uzp = np.cos(theta)
-        ux = uxp*np.cos(tilt)-uzp*np.sin(tilt)
+        ux = uxp*np.cos(tilt)+uzp*np.sin(tilt)
         uy = uyp
-        uz = uzp*np.cos(tilt)+uxp*np.sin(tilt)
+        uz = uzp*np.cos(tilt)-uxp*np.sin(tilt)
         command=f"print_materials {xml_file} 0 0 0 {Z*ux/uz} {Z*uy/uz} {Z}"
         #print(command)
         #command += " | grep 'Integrated interaction lengths' | awk '{print $5;}'"

@@ -1,11 +1,15 @@
 import numpy as np, subprocess
 import sys
 if (len(sys.argv)==1):
-    print("syntax:  integrated_interaction_lengths.py input.xml")
+    print("syntax:  integrated_interaction_lengths.py input.xml [use z* (default true)]")
     exit()
 xml_file=sys.argv[1]
 
-tilt=.025
+useZstar=False if len(sys.argv)>=3 and bool(sys.argv[2])==False else True
+if useZstar:
+    tilt=-.025
+else :
+    tilt=0
 avgs=[]
 thetas=[]
 for thetad in np.linspace(0, 10, 41):
@@ -17,9 +21,9 @@ for thetad in np.linspace(0, 10, 41):
         uxp = np.sin(theta)*np.cos(phi)
         uyp = np.sin(theta)*np.sin(phi)
         uzp = np.cos(theta)
-        ux = uxp*np.cos(tilt)-uzp*np.sin(tilt)
+        ux = uxp*np.cos(tilt)+uzp*np.sin(tilt)
         uy = uyp
-        uz = uzp*np.cos(tilt)+uxp*np.sin(tilt)
+        uz = uzp*np.cos(tilt)-uxp*np.sin(tilt)
         command=f"print_materials {xml_file} 0 0 0 {Z*ux/uz} {Z*uy/uz} {Z}"
         print(command)
         #command += " | grep 'Integrated interaction lengths' | awk '{print $5;}'"

@@ -12,7 +12,7 @@ If you don't have them already, get the latest ip6 files and install them:
 git clone https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
 cd ip6
 mkdir build && cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$ATHENA_PREFIX
+cmake .. -DCMAKE_INSTALL_PREFIX=$EIC_SHELL_PREFIX
 make install
 cd ../..
 ```
@@ -22,7 +22,7 @@ git clone https://github.com/rymilton/eic_endcap_insert.git
 cd eic_endcap_insert
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$ATHENA_PREFIX
+cmake .. -DCMAKE_INSTALL_PREFIX=$EIC_SHELL_PREFIX
 make install
 ```
 Make sure IP6 and this repository have the same install prefix.
