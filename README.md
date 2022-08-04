@@ -4,7 +4,7 @@
 
 Getting started
 ---------------------------------
-Enter the EIC container hom([installation instructions](https://eic.phy.anl.gov/tutorials/eic_tutorial/getting-started/quickstart/)) and source the default enviroment (`source /opt/detector/setup.sh`). Go to the directory containing your EIC container.
+Enter the EIC container ([installation instructions](https://eic.phy.anl.gov/tutorials/eic_tutorial/getting-started/quickstart/)) and source the default enviroment (`source /opt/detector/setup.sh`). Go to the directory containing your EIC container.
 ## Installation instructions
 
 If you don't have them already, get the latest ip6 files and install them:
