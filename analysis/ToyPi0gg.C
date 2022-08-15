@@ -100,11 +100,11 @@ void ToyPi0gg(const Int_t nev = 2200)
   string str_node = "e1";
   for(Int_t i=1; i<nin; i++)
     str_node += Form(",e%d", i+1);
-  str_node += Form(":%d:p!", nin+6);
+  str_node += Form(":%d:p!", nin+5);
 
   auto mlp = new TMultiLayerPerceptron(
       str_node.c_str(),
-      t_data, "Entry$%2==0", "Entry$%2!=0");
+      t_data, "Entry$%10!=0", "Entry$%10==0");
 
   mlp->SetLearningMethod(TMultiLayerPerceptron::kStochastic);
   mlp->Train(600, "text, graph, update=100");
@@ -119,7 +119,7 @@ void ToyPi0gg(const Int_t nev = 2200)
     g_eff[ig]->SetName(Form("g_eff_%d",ig));
   }
 
-  for(Long64_t ien=1; ien<t_data->GetEntries(); ien+=2)
+  for(Long64_t ien=0; ien<t_data->GetEntries(); ien+=10)
   {
     t_data->GetEntry(ien);
     array<Double_t, nin> v_inf;
@@ -141,16 +141,16 @@ void ToyPi0gg(const Int_t nev = 2200)
       n_eff[ig] = h_p[ig]->Integral(1+ib, nbins);
       g_eff[ig]->SetPoint(ib, p, n_eff[ig]/n_total[ig]);
     }
-    Float_t sb = n_eff[0] / sqrt(n_eff[0] + n_eff[1]) / sqrt(n_total[0]);
+    Float_t sb = n_eff[0] / sqrt(n_eff[0] + n_eff[1] + 1e-6) / sqrt(n_total[0] + 1e-6);
     g_eff[2]->SetPoint(ib, p, sb);
   }
 
   auto c1 = new TCanvas("c1", "c1", 600, 600);
   auto leg0 = new TLegend(0.2, 0.2);
-  const char *leg0_text[3] = {"BG eff", "Sig eff", "S/#sqrt{S+B}"};
+  const char *leg0_text[3] = {"Sig", "Bg", "S/#sqrt{S+B}"};
   for(Int_t ig=0; ig<3; ig++)
   {
-    g_eff[ig]->SetTitle("Efficiency for photon");
+    g_eff[ig]->SetTitle("Efficiency");
     g_eff[ig]->GetXaxis()->SetTitle("Cut value");
     g_eff[ig]->GetYaxis()->SetTitle("Efficiency");
     g_eff[ig]->GetYaxis()->SetRangeUser(0., 1.);
