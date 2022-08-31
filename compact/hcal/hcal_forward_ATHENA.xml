@@ -1,0 +1,99 @@
+<lccdd>
+
+  <info name="hcal_forward_ATHENA.xml"
+        title="ATHENA Forward HCal with insert cutout"
+        author="@rymilton"
+        url="https://github.com/rymilton"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+
+    <documentation>
+      #### HCal Thicknesses 
+    </documentation>
+    <constant name="HcalEndcapPAbsorberThickness"      value="2.0 * cm"/>
+    <constant name="HcalEndcapPScintillatorThickness"  value="0.3 * cm"/>
+    <constant name="HcalEndcapPAirThickness"           value="0.04 * cm"/>
+
+    <documentation>
+      - Hcal Endcap N Layers and computed Thickness
+    </documentation>
+    <constant name="HcalEndcapPSingleLayerThickness" 
+      value="HcalEndcapPAbsorberThickness +
+             HcalEndcapPScintillatorThickness +
+             HcalEndcapPAirThickness"
+    />
+
+    <constant name="HcalEndcapPBackplateThickness" value="HcalEndcapPAbsorberThickness"/>
+
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Forward (Positive Z) Endcap Hadronic Calorimeter
+      
+      ATHENA design (STAR FCS): 50 layers of 2/0.3 cm Steel/Sc with steel backplate
+      HCal insert is cut out from the middle of the detector 
+    </documentation>
+    <detector 
+      id="HCalEndcapP_ID" 
+      name="HcalEndcapP" 
+      type="EndcapCalorimeterWithInsert" 
+      readout="HcalEndcapPHits">
+      <position x="0" y="0" z="HcalEndcapP_zmin"/>
+      <comment> HCal has 50 layers + 1 layer of just absorber </comment>
+      <dimensions 
+        z="HcalEndcapPSingleLayerThickness * HcalEndcapP_ATHENA_numSteelScLayers +
+           HcalEndcapPBackplateThickness" 
+        rmin="HcalEndcapP_rmin"
+        rmax="HcalEndcapP_rmax"
+      />
+      <layer repeat="HcalEndcapP_ATHENA_numSteelScLayers" thickness = "HcalEndcapPSingleLayerThickness">
+        <slice name="Absorber_slice" material="Steel235" thickness="HcalEndcapPAbsorberThickness" vis="AnlLight_Gray"/>
+        <slice name="Scintillator_slice" material="PlasticScint126" thickness="HcalEndcapPScintillatorThickness" vis="AnlOrange" sensitive="yes"/>
+        <slice name="Air_slice" material="Air" thickness="HcalEndcapPAirThickness" vis="Invisible"/>
+      </layer>
+      <comment> Final layer of steel </comment>
+      <layer repeat="1" thickness = "HcalEndcapPBackplateThickness">
+        <slice name="Absorber_slice" material="Steel235" thickness="HcalEndcapPBackplateThickness" vis="AnlLight_Gray"/>
+      </layer>
+      <insert>
+        <position x="HcalEndcapPInsert_xposition" y="0" z = "0" />
+        <dimensions
+          x="HcalEndcapPInsert_width"
+          y="HcalEndcapPInsert_height"
+        />
+      </insert>
+    </detector>
+
+  </detectors>
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="HcalEndcapPHits">
+      <segmentation 
+        type="CartesianGridXY" 
+        grid_size_x="100 * mm" 
+        grid_size_y="100 * mm"
+      />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

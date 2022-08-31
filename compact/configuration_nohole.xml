@@ -2,35 +2,34 @@
     <documentation>
       Insert with basically no hole. 
       Make sure to comment out the beampipe in endcapP_insert.xml
-      pHCal will add an extra layer of only absorber
-      pHCal and pHCal insert will add an extra layer of only absorber
+      Forward HCal and forward HCal insert will add a backlayer of only absorber
     </documentation>
-    <constant name="pHCalInsert_zmin"     value="380.0*cm"/>
-    <constant name="pHCalInsert_xpos"     value="-10*cm"/>
-    <constant name="pHCalInsert_xtotal"   value="59.6*cm"/>
-    <constant name="pHCalInsert_ytotal"   value="59.7485*cm"/>
-    <constant name="pHCalInsert_numTungstenScLayers"   value="30"/>
-    <constant name="pHCalInsert_numSteelScLayers"   value="20"/>
-    <constant name="pHCalInsert_opening_radius" value="0.00001*cm"/>
-    <constant name="pHCalInsert_final_radius" value="0.00001*cm"/>
+    <constant name="HcalEndcapPInsert_zmin"                 value="380.0*cm"/>
+    <constant name="HcalEndcapPInsert_xposition"            value="-10*cm"/>
+    <constant name="HcalEndcapPInsert_width"                value="59.6*cm"/>
+    <constant name="HcalEndcapPInsert_height"               value="59.7485*cm"/>
+    <constant name="HcalEndcapPInsert_numTungstenScLayers"  value="30"/>
+    <constant name="HcalEndcapPInsert_numSteelScLayers"     value="20"/>
+    <constant name="HcalEndcapPInsert_opening_hole_radius"  value="0.00001*cm"/>
+    <constant name="HcalEndcapPInsert_final_hole_radius"    value="0.00001*cm"/>
 
-    <constant name="pHCal_zmin"     value="380*cm"/>
-    <constant name="pHCal_rmin"   value="0*cm"/>
-    <constant name="pHCal_rmax"   value="267*cm"/>
-    <constant name="pHCal_ECCE_numSteelScLayers"   value="60"/>
-    <constant name="pHCal_ECCE_numTungstenScLayers"   value="9"/>
-    <constant name="pHCal_ATHENA_numSteelScLayers"   value="50"/>
+    <constant name="HcalEndcapP_zmin"                       value="380*cm"/>
+    <constant name="HcalEndcapP_rmin"                       value="0*cm"/>
+    <constant name="HcalEndcapP_rmax"                       value="267*cm"/>
+    <constant name="HcalEndcapP_ECCE_numSteelScLayers"      value="60"/>
+    <constant name="HcalEndcapP_ECCE_numTungstenScLayers"   value="9"/>
+    <constant name="HcalEndcapP_ATHENA_numSteelScLayers"    value="50"/>
     
-    <constant name="pECalInsert_zmin"     value="350*cm"/>
-    <constant name="pECalInsert_xpos"     value="-10*cm"/>
-    <constant name="pECalInsert_xtotal"   value="60.*cm"/>
-    <constant name="pECalInsert_ytotal"   value="60.*cm"/>
-    <constant name="pECalInsert_numLayers"   value="1"/>
-    <constant name="pECalInsert_opening_radius" value="0.00001*cm"/>
-    <constant name="pECalInsert_final_radius" value="0.00001*cm"/>
+    <constant name="EcalEndcapPInsert_zmin"                 value="350*cm"/>
+    <constant name="EcalEndcapPInsert_xposition"            value="-10*cm"/>
+    <constant name="EcalEndcapPInsert_width"                value="60.*cm"/>
+    <constant name="EcalEndcapPInsert_height"               value="60.*cm"/>
+    <constant name="EcalEndcapPInsert_numLayers"            value="1"/>
+    <constant name="EcalEndcapPInsert_opening_hole_radius"  value="0.00001*cm"/>
+    <constant name="EcalEndcapPInsert_final_hole_radius"    value="0.00001*cm"/>
 
-    <constant name="pECal_zmin"     value="350*cm"/>
-    <constant name="pECal_rmin"   value="0*cm"/>
-    <constant name="pECal_rmax"   value="190*cm"/>
-    <constant name="pECal_numLayers"   value="1"/>
+    <constant name="EcalEndcapP_zmin"                       value="350*cm"/>
+    <constant name="EcalEndcapP_rmin"                       value="0*cm"/>
+    <constant name="EcalEndcapP_rmax"                       value="190*cm"/>
+    <constant name="EcalEndcapP_numLayers"                  value="1"/>
   </define>
