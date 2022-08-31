@@ -48,7 +48,7 @@ podioevent = EICDataSvc("EventDataSvc", inputs=input_sims)
 # juggler components
 from Configurables import Jug__Digi__CalorimeterHitDigi as CalHitDigi
 from Configurables import Jug__Reco__CalorimeterHitReco as CalHitReco
-from Configurables import Jug__Reco__CalorimeterHitsMerger as CalHitsMerger
+# from Configurables import Jug__Reco__CalorimeterHitsMerger as CalHitsMerger
 # from Configurables import Jug__Reco__CalorimeterIslandCluster as IslandCluster
 
 # from Configurables import Jug__Reco__ImagingPixelReco as ImCalPixelReco
@@ -120,7 +120,6 @@ ci_ecal_digi = CalHitDigi("ci_ecal_digi",
          inputHitCollection="EcalEndcapPHits",
          outputHitCollection="EcalEndcapHitsDigi",
          **ci_ecal_daq)
-
 ci_ecal_reco = CalHitReco("ci_ecal_reco",
         inputHitCollection=ci_ecal_digi.outputHitCollection,
         outputHitCollection="EcalEndcapPHitsReco",
@@ -138,7 +137,6 @@ ci_ecal_insert_digi = CalHitDigi("ci_ecal_insert_digi",
          inputHitCollection="EcalEndcapPInsertHits",
          outputHitCollection="EcalEndcapPInsertHitsDigi",
          **ci_ecal_insert_daq)
-
 ci_ecal_insert_reco = CalHitReco("ci_ecal_insert_reco",
         inputHitCollection=ci_ecal_insert_digi.outputHitCollection,
         outputHitCollection="EcalEndcapPInsertHitsReco",
