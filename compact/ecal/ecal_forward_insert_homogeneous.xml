@@ -1,0 +1,97 @@
+<lccdd>
+
+  <info name="ecal_forward_insert_homogeneous.xml"
+        title="Homogeneous insert for forward ECal"
+        author="@rymilton"
+        url="https://github.com/rymilton"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <documentation>
+      #### Material Thickness
+    </documentation>
+    <comment> ECal insert thicknesses </comment>
+    <constant name="EcalEndcapPInsertCoverThickness"            value="0.1*cm"/>
+    <constant name="EcalEndcapPInsertAirThickness"              value="10.15*cm"/>
+    <constant name="EcalEndcapPInsertPCBThickness"              value="0.25*cm"/>
+    <constant name="EcalEndcapPInsertLightGuideThickness"       value="2.5*cm"/>
+    <constant name="EcalEndcapPInsertScintillatorThickness"     value="17.*cm"/>
+
+    <documentation>
+      - ECal Insert N Layers and computed Thickness
+    </documentation>
+    <constant name="EcalEndcapPInsertSingleLayerThickness"
+      value = "EcalEndcapPInsertCoverThickness +
+               EcalEndcapPInsertAirThickness +
+               EcalEndcapPInsertPCBThickness +
+               EcalEndcapPInsertLightGuideThickness +
+               EcalEndcapPInsertScintillatorThickness "
+    />
+    <constant name="EcalEndcapPInsertLayer_NRepeat" value="EcalEndcapPInsert_numLayers"/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+    <documentation>
+      ### Forward (Positive Z) Endcap Insert for Electromagnetic Calorimeter
+      Insert goes in the middle of the forward endcap ECal -- around the beampipe
+
+      Homogeneous implementation of the ScFi insert
+      Each layer contains an aluminum cover, an air gap, PCB, light guides, and scintillating material
+      
+    </documentation>
+    <detector
+      id="ECalEndcapPInsert_ID" 
+      name="EcalEndcapPInsert" 
+      type="InsertCalorimeter"
+      readout="EcalEndcapPInsertHits"
+    >
+      <position x="EcalEndcapPInsert_xposition" y="0*m" z="EcalEndcapPInsert_zmin"/>
+      <rotation x="0" y="0" z="0"/>
+      <dimensions 
+        x="EcalEndcapPInsert_width"
+        y="EcalEndcapPInsert_height"
+        z="EcalEndcapPInsertSingleLayerThickness * EcalEndcapPInsertLayer_NRepeat"
+      />
+      <layer repeat="EcalEndcapPInsertLayer_NRepeat" thickness = "EcalEndcapPInsertSingleLayerThickness">
+        <slice name="Cover_slice" material="Aluminum" thickness="EcalEndcapPInsertCoverThickness" vis="AnlDarkRed"/>
+        <slice name="Air_slice" material="Air" thickness="EcalEndcapPInsertAirThickness" vis="AnlDarkRed"/>
+        <slice name="PCB_slice" material="Fr4" thickness="EcalEndcapPInsertPCBThickness" vis="AnlDarkRed"/>
+        <slice name="LightGuide_slice" material="Plexiglass" thickness="EcalEndcapPInsertLightGuideThickness" vis="AnlBlue"/>
+        <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="EcalEndcapPInsertScintillatorThickness" vis="AnlOrange" sensitive="true"/> 
+      </layer>
+      <beampipe_hole 
+        initial_hole_radius="EcalEndcapPInsert_opening_hole_radius"
+        final_hole_radius="EcalEndcapPInsert_final_hole_radius"
+      />
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="EcalEndcapPInsertHits">
+      <segmentation 
+        type="CartesianGridXY"
+        grid_size_x="2.*cm"
+        grid_size_y="2.*cm"
+      />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>
