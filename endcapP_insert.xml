@@ -23,17 +23,16 @@
   <comment> Including the central beampipe </comment>
   <include ref="ip6/central_beampipe.xml" />
 
-  <comment> Including the pEndcap insert </comment>
-  <include ref="compact/pECalInsert.xml"/>
-  <include ref="compact/pHCalInsert.xml"/>
-  <!-- <include ref="compact/leakage_detector.xml"/> -->
+  <comment> Including the forward inserts </comment>
+  <include ref="compact/ecal/ecal_forward_insert_homogeneous.xml"/>
+  <include ref="compact/hcal/hcal_forward_insert.xml"/>
 
-  <comment> Including the pEndcap homogeneous </comment>
-  <include ref="compact/ecal_forward_homogeneous.xml"/>
+  <comment> Including the homogeneous forward ECal </comment>
+  <include ref="compact/ecal/ecal_forward_homogeneous.xml"/>
 
-  <comment> Including the pHCal </comment>
-  <comment> Change to compact/hcal_ECCE.xml for ECCE pHCal</comment>
-  <include ref="compact/hcal_ATHENA.xml"/>
+  <comment> Including the forward HCal </comment>
+  <comment> Change to compact/hcal/hcal_forward_ECCE.xml for ECCE pHCal</comment>
+  <include ref="compact/hcal/hcal_forward_ECCE.xml"/>
 
   <detectors>
   </detectors>
