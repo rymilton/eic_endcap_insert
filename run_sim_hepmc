@@ -4,14 +4,14 @@ set -o errexit
 
 # Input simulation parameters
 particle="$2"
-energies=(80) #(1 2 5 10 20 30 40 50 60 70 80 90 100)
+energies=(1 2 5 10 20 30 40 50 60 70 80 90 100)
 j=$(( $1 % 100 ))
 k=$(( $1 / 100 ))
 beam_energy=${energies[$k]}
-min_e=$(echo "$beam_energy * 0.1" | bc)
+min_e=0.5 #$(echo "$beam_energy * 0.02" | bc)
 num_events=1000
-theta_min=15 #2.83 # in degrees
-theta_max=20 #2.83 # in degrees
+theta_min=0 #2.83 # in degrees
+theta_max=5 #2.83 # in degrees
 phi_min=0 # in degrees
 phi_max=360 # in degrees 
 physics_list="FTFP_BERT_HP"
@@ -23,7 +23,7 @@ mkdir -p ${OUTDIR}
 compact_file=./endcapP_insert.xml
 info_string="${particle}_${beam_energy}GeV_theta_${theta_min}_${theta_max}deg-$j"
 hepmc_file="${OUTDIR}/gen_${info_string}.hepmc"
-sim_file="${OUTDIR}/sim_${info_string}.root"
+sim_file="${OUTDIR}/sim_${info_string}.edm4hep.root"
 reco_file="${OUTDIR}/reco_${info_string}.edm4hep.root"
 
 # Generating hepmc file

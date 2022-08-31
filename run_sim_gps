@@ -24,7 +24,7 @@ cd proc$1
 # Output file names
 compact_file=../endcapP_insert.xml
 info_string="${particle}_${beam_energy}GeV_theta_${theta_low}deg_${theta_high}deg"
-sim_file="${OUTDIR}/sim_${info_string}.root"
+sim_file="${OUTDIR}/sim_${info_string}.edm4hep.root"
 reco_file="${OUTDIR}/reco_${info_string}.edm4hep.root"
 
 # Putting parameters into gps file
