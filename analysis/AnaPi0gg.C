@@ -1,3 +1,5 @@
+#include "../dataset/weights/TMVAClassification_MLP-str_include.class.C"
+
 #include <iostream>
 #include <array>
 #include <algorithm>
@@ -8,6 +10,7 @@
 #include <TFile.h>
 #include <TTree.h>
 #include <TLeaf.h>
+#include <TH1.h>
 #include <TH2.h>
 
 using namespace std;
@@ -35,7 +38,7 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
 {
   const char *data_dir = "/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic";
   TString file_name;
-  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  file_name.Form("%s/endcap/sim_%s_%gGeV_theta_15_15deg-%d.edm4hep.root", data_dir, particle.c_str(), energy, proc);
   auto data_file = new TFile(file_name);
   if(!data_file || !data_file->IsOpen())
   {
@@ -58,15 +61,20 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
   array<Float_t, nin> v_in;
   Float_t center_x, center_y, pout;
 
-  file_name.Form("%s/histos/training-%s_%gGeV_theta_15_20deg-%d.root", data_dir, particle.c_str(), energy, proc);
-  auto f_out = new TFile(file_name, "RECREATE");
-  auto t_data = new TTree("T", "Training data");
-  t_data->Branch("ntruth", &ntruth, "ntruth/I");
+  TFile *f_out[2];
+  TTree *t_data[2];
+  file_name.Form("%s/histos/training-%s_single_%gGeV_theta_15_15deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  f_out[0] = new TFile(file_name, "RECREATE");
+  t_data[0] = new TTree("T", "Training data");
+  t_data[0]->Branch("ntruth", &ntruth, "ntruth/I");
   for(Int_t i=0; i<nin; i++)
-    t_data->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
-  t_data->Branch("center_x", &center_x, "center_x/F");
-  t_data->Branch("center_y", &center_y, "center_y/F");
-  t_data->Branch("p", &pout, "p/F");
+    t_data[0]->Branch(Form("e%d", i+1), &v_in[i], Form("e%d/F", i+1));
+  t_data[0]->Branch("center_x", &center_x, "center_x/F");
+  t_data[0]->Branch("center_y", &center_y, "center_y/F");
+  t_data[0]->Branch("p", &pout, "p/F");
+  file_name.Form("%s/histos/training-%s_merged_%gGeV_theta_15_15deg-%d.root", data_dir, particle.c_str(), energy, proc);
+  f_out[1] = new TFile(file_name, "RECREATE");
+  t_data[1] = t_data[0]->CloneTree(0);
 
   auto h2_e = new TH2F("h2_e", "Energy;x;y", 2*nd+1,-nd-0.5,nd+0.5, 2*nd+1,-nd-0.5,nd+0.5);
 
@@ -84,6 +92,17 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
   events->SetBranchAddress("EcalEndcapPHits.position.y", hit_y);
   events->SetBranchAddress("EcalEndcapPHits.energy", hit_e);
 
+  const char *inputVars[11] = {"e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "center_x", "center_y"};
+  vector<string> theInputVars;
+  for(Int_t i=0; i<11; i++)
+    theInputVars.emplace_back(inputVars[i]);
+  auto mlp = new ReadMLP(theInputVars);
+  const double pcut = str_pcut;
+
+  Float_t ebin[8] = {15, 25, 35, 45, 55, 70, 90, 110};
+  auto h_total = new TH1F("h_total", "Total number of pi0s", 7, ebin);
+  auto h_merged = new TH1F("h_merged", "Merged number of pi0s", 7, ebin);
+
   for(Long64_t iev = 0; iev < events->GetEntries(); iev++)
   {
     events->GetEntry(iev);
@@ -97,11 +116,18 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
     if(ntruth <= 0 || ntruth > 2)
       continue;
 
-    if(ntruth == 2 && point_dis(mc_x[imcg[0]], mc_y[imcg[0]], mc_x[imcg[1]], mc_y[imcg[1]]) > 1.5*tsize)
-      continue;
-
     v_in.fill(0.);
     pout = 2 - ntruth;
+
+    bool fill_tree = true;
+    if(ntruth == 2)
+    {
+      Float_t sep_dis = point_dis(mc_x[imcg[0]], mc_y[imcg[0]], mc_x[imcg[1]], mc_y[imcg[1]]);
+      if(sep_dis > tsize*1.8)
+        pout = 1;
+      else if(sep_dis > tsize*1.4)
+        fill_tree = false;
+    }
 
     Float_t sum_in = 0.;
     Int_t nhit = events->GetLeaf("EcalEndcapPHits.energy")->GetLen();
@@ -126,9 +152,29 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
         for(Int_t j=-nb; j<=nb; j++)
           v_in[(i+nb)*(2*nb+1)+(j+nb)] /= sum_in;
 
-    t_data->Fill();
+    if(fill_tree)
+      t_data[1-(Int_t)pout]->Fill();
+
+    vector<Double_t> v_input(v_in.begin(), v_in.end());
+    v_input.emplace_back(center_x);
+    v_input.emplace_back(center_y);
+    if( ntruth == 2 )
+    {
+      h_total->Fill(energy);
+      if( pout < 0.5 && mlp->GetMvaValue(v_input) > pcut )
+        h_merged->Fill(energy);
+    }
   } // iev
 
-  f_out->Write();
-  f_out->Close();
+  for(Int_t i=0; i<2; i++)
+  {
+    f_out[i]->cd();
+    t_data[i]->Write();
+    if(i == 1)
+    {
+      h_total->Write();
+      h_merged->Write();
+    }
+    f_out[i]->Close();
+  }
 }

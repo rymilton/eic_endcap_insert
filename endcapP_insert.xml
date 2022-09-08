@@ -24,11 +24,11 @@
   <!--include ref="ip6/central_beampipe.xml" /-->
 
   <comment> Including the forward inserts </comment>
-  <!--include ref="compact/ecal/ecal_forward_insert_homogeneous.xml"/-->
+  <include ref="compact/ecal/ecal_forward_insert_homogeneous.xml"/>
   <!--include ref="compact/hcal/hcal_forward_insert.xml"/-->
 
   <comment> Including the homogeneous forward ECal </comment>
-  <include ref="compact/ecal/ecal_forward_scfi.xml"/>
+  <include ref="compact/ecal/ecal_forward_homogeneous.xml"/>
 
   <comment> Including the forward HCal </comment>
   <comment> Change to compact/hcal/hcal_forward_ECCE.xml for ECCE pHCal</comment>

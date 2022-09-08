@@ -206,8 +206,8 @@ int TMVAClassification( TString myMethodList = "" )
   //TFile *fbg = new TFile("/gpfs/mnt/gpfs02/sphenix/user/shura/athena/emc/pi0.root");
   //TTree *signalTree     = (TTree*)fsg->Get("treeML");
   //TTree *background     = (TTree*)fbg->Get("treeML");
-  TFile *fsg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-gamma_80GeV_theta_15_20deg.root"); // Produced by emc.cc
-  TFile *fbg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-pi0_80GeV_theta_15_20deg.root");
+  TFile *fsg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-single_100GeV_theta_15_15deg.root"); // Produced by AnaPi0gg.C
+  TFile *fbg = new TFile("/gpfs/mnt/gpfs02/phenix/spin/spin1/phnxsp01/zji/data/eic/histos/training-merged_100GeV_theta_15_15deg.root");
   TTree *signalTree     = (TTree*)fsg->Get("T");
   TTree *background     = (TTree*)fbg->Get("T");
 
@@ -226,7 +226,8 @@ int TMVAClassification( TString myMethodList = "" )
   // All TMVA output can be suppressed by removing the "!" (not) in
   // front of the "Silent" argument in the option string
   TMVA::Factory *factory = new TMVA::Factory( "TMVAClassification", outputFile,
-      "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
+      //"!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification" );
+      "!V:!Silent:Color:DrawProgressBar:AnalysisType=Classification" );
 
   TMVA::DataLoader *dataloader=new TMVA::DataLoader("dataset");
   // If you wish to modify default settings
