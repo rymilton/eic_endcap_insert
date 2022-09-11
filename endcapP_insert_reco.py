@@ -31,8 +31,8 @@ compact_path = os.path.join(detector_path, detector_name)
 #ce_hcal_sf = float(os.environ.get("CE_HCAL_SAMP_FRAC", 0.025))
 ci_hcal_sf = "1."
 ci_hcal_insert_sf = "1."
-ci_ecal_sf = "1."
-ci_ecal_insert_sf = "1."
+ci_ecal_sf = "0.03"
+ci_ecal_insert_sf = "0.03"
 
 # input and output
 input_sims = [f.strip() for f in str.split(os.environ["JUGGLER_SIM_FILE"], ",") if f.strip()]
@@ -112,13 +112,15 @@ ci_hcal_insert_reco = CalHitReco("ci_hcal_insert_reco",
 
 # Hadron Endcap ECal
 ci_ecal_daq = dict(
-         dynamicRangeADC=200.*MeV,
-         capacityADC=32768,
-         pedestalMean=400,
-         pedestalSigma=10)
+         dynamicRangeADC=3.*GeV,
+         capacityADC=16384,
+         pedestalMean=100,
+         pedestalSigma=0.7)
 ci_ecal_digi = CalHitDigi("ci_ecal_digi",
          inputHitCollection="EcalEndcapPHits",
          outputHitCollection="EcalEndcapHitsDigi",
+         scaleResponse=ci_ecal_sf,
+         energyResolutions=[0.00316,0.0015,0.0],
          **ci_ecal_daq)
 ci_ecal_reco = CalHitReco("ci_ecal_reco",
         inputHitCollection=ci_ecal_digi.outputHitCollection,
@@ -129,13 +131,15 @@ ci_ecal_reco = CalHitReco("ci_ecal_reco",
 
 # Hadron Endcap ECal Insert
 ci_ecal_insert_daq = dict(
-         dynamicRangeADC=200.*MeV,
-         capacityADC=32768,
-         pedestalMean=400,
-         pedestalSigma=10)
+         dynamicRangeADC=3.*GeV,
+         capacityADC=16384,
+         pedestalMean=100,
+         pedestalSigma=0.7)
 ci_ecal_insert_digi = CalHitDigi("ci_ecal_insert_digi",
          inputHitCollection="EcalEndcapPInsertHits",
          outputHitCollection="EcalEndcapPInsertHitsDigi",
+         scaleResponse=ci_ecal_insert_sf,
+         energyResolutions=[0.00316, 0.0015, 0.0],
          **ci_ecal_insert_daq)
 ci_ecal_insert_reco = CalHitReco("ci_ecal_insert_reco",
         inputHitCollection=ci_ecal_insert_digi.outputHitCollection,
