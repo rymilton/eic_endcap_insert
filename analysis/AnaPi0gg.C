@@ -55,7 +55,7 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
   const Float_t tsize = (tsize_x + tsize_y) / 2.;
 
   const Int_t nd = 5;
-  const Int_t nb = 1;
+  const Int_t nb = 2;
   const Int_t nin = (2*nb+1)*(2*nb+1);
   Int_t ntruth;
   array<Float_t, nin> v_in;
@@ -92,14 +92,14 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
   events->SetBranchAddress("EcalEndcapPHits.position.y", hit_y);
   events->SetBranchAddress("EcalEndcapPHits.energy", hit_e);
 
-  const char *inputVars[11] = {"e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "center_x", "center_y"};
+  const char* inputVars[27] = { "e1", "e2", "e3", "e4", "e5", "e6", "e7", "e8", "e9", "e10", "e11", "e12", "e13", "e14", "e15", "e16", "e17", "e18", "e19", "e20", "e21", "e22", "e23", "e24", "e25", "center_x", "center_y" };
   vector<string> theInputVars;
-  for(Int_t i=0; i<11; i++)
+  for(Int_t i=0; i<27; i++)
     theInputVars.emplace_back(inputVars[i]);
   auto mlp = new ReadMLP(theInputVars);
   const double pcut = str_pcut;
 
-  Float_t ebin[8] = {15, 25, 35, 45, 55, 70, 90, 110};
+  Float_t ebin[8] = {15, 25, 35, 45, 55, 65, 95, 105};
   auto h_total = new TH1F("h_total", "Total number of pi0s", 7, ebin);
   auto h_merged = new TH1F("h_merged", "Merged number of pi0s", 7, ebin);
 
@@ -119,14 +119,11 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
     v_in.fill(0.);
     pout = 2 - ntruth;
 
-    bool fill_tree = true;
     if(ntruth == 2)
     {
       Float_t sep_dis = point_dis(mc_x[imcg[0]], mc_y[imcg[0]], mc_x[imcg[1]], mc_y[imcg[1]]);
-      if(sep_dis > tsize*1.8)
+      if(sep_dis > tsize*2.5)
         pout = 1;
-      else if(sep_dis > tsize*1.4)
-        fill_tree = false;
     }
 
     Float_t sum_in = 0.;
@@ -152,8 +149,7 @@ void AnaPi0gg(Double_t energy, Int_t proc, string particle = "gamma")
         for(Int_t j=-nb; j<=nb; j++)
           v_in[(i+nb)*(2*nb+1)+(j+nb)] /= sum_in;
 
-    if(fill_tree)
-      t_data[1-(Int_t)pout]->Fill();
+    t_data[1-(Int_t)pout]->Fill();
 
     vector<Double_t> v_input(v_in.begin(), v_in.end());
     v_input.emplace_back(center_x);

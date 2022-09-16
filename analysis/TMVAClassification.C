@@ -255,6 +255,22 @@ int TMVAClassification( TString myMethodList = "" )
   dataloader->AddVariable( "e7", 'F' );
   dataloader->AddVariable( "e8", 'F' );
   dataloader->AddVariable( "e9", 'F' );
+  dataloader->AddVariable( "e10", 'F' );
+  dataloader->AddVariable( "e11", 'F' );
+  dataloader->AddVariable( "e12", 'F' );
+  dataloader->AddVariable( "e13", 'F' );
+  dataloader->AddVariable( "e14", 'F' );
+  dataloader->AddVariable( "e15", 'F' );
+  dataloader->AddVariable( "e16", 'F' );
+  dataloader->AddVariable( "e17", 'F' );
+  dataloader->AddVariable( "e18", 'F' );
+  dataloader->AddVariable( "e19", 'F' );
+  dataloader->AddVariable( "e20", 'F' );
+  dataloader->AddVariable( "e21", 'F' );
+  dataloader->AddVariable( "e22", 'F' );
+  dataloader->AddVariable( "e23", 'F' );
+  dataloader->AddVariable( "e24", 'F' );
+  dataloader->AddVariable( "e25", 'F' );
   dataloader->AddVariable( "center_x", 'F' );
   dataloader->AddVariable( "center_y", 'F' );
 
