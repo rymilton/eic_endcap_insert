@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Input simulation parameters
+num_events=10000
+physics_list="FTFP_BERT_HP"
+
+# Output file names
+hepmcfile="./djangoh_generation/athena_ana/Beam_effects/outfiles/djangoh.NC.18x275_beameffects.hepmc"
+info_string="djangoh_18_275"
+simfile="sim_${info_string}.edm4hep.root"
+recofile="reco_${info_string}.edm4hep.root"
+
+# Running simulation
+npsim \
+   --compactFile endcapP_full.xml \
+   --numberOfEvents ${num_events} \
+   --physicsList ${physics_list} \
+   --inputFiles ${hepmcfile} \
+   --outputFile ${simfile}  || exit
+   
+# Running reconstruction
+export JUGGLER_SIM_FILE=${simfile} JUGGLER_REC_FILE=${recofile} JUGGLER_N_EVENTS=${num_events}
+gaudirun.py endcapP_full_reco.py
+

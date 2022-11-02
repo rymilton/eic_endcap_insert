@@ -1,0 +1,49 @@
+<lccdd>
+  <define>
+    <include ref="ip6/definitions.xml" /> 
+    <include ref="compact/definitions.xml" />
+    <include ref="compact/configuration_default.xml"/>
+  </define>
+
+  <includes>
+    <gdmlFile ref="compact/elements.xml"/>
+    <gdmlFile ref="compact/materials.xml"/>
+  </includes>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  <include ref="compact/colors.xml" />
+  </display>
+  
+  <comment> Including the central beampipe </comment>
+  <include ref="ip6/central_beampipe.xml" />
+
+  <comment> Including the forward inserts </comment>
+  <include ref="compact/ecal/ecal_forward_insert_homogeneous.xml"/>
+  <include ref="compact/hcal/hcal_forward_insert.xml"/>
+
+  <comment> Including the homogeneous forward ECal </comment>
+  <include ref="compact/ecal/ecal_forward_homogeneous.xml"/>
+
+  <comment> Including the forward HCal </comment>
+  <comment> Change to compact/hcal/hcal_forward_ECCE.xml for ECCE pHCal</comment>
+  <include ref="compact/hcal/hcal_forward_ATHENA.xml"/>
+
+  <detectors>
+  </detectors>
+
+  <readouts>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>
