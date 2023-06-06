@@ -4,33 +4,29 @@
 
 Getting started
 ---------------------------------
-Enter the EIC container ([installation instructions](https://eicweb.phy.anl.gov/containers/eic_container)) and go to the directory containing your EIC container (if not already there). 
-
-Note that the latest version defines `$EIC_SHELL_PREFIX` instead of the old version's `$ATHENA_PREFIX`. 
+Enter the EIC container ([installation instructions](https://github.com/eic/eic-shell)) and go to the directory containing your EIC container (if not already there). 
 
 ## Installation instructions
 
-If you don't have them already, get the latest ip6 files and install them:
+Get the archived ip6 files and install them:
 ```
-git clone https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
+git clone https://github.com/eic/ip6.git
 cd ip6
 mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$EIC_SHELL_PREFIX
-make install
+make install -j8
 cd ../..
 ```
 Then clone this repository and install it:
 ```
 git clone https://github.com/rymilton/eic_endcap_insert.git
 cd eic_endcap_insert
-mkdir build
-cd build
+mkdir build && cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$EIC_SHELL_PREFIX
-make install
+make install -j8
+cd ..
 ```
 Make sure IP6 and this repository have the same install prefix.
-
-##### NOTE: If you're using an old version of the EIC container, check if `./local/lib` is listed in `$LD_LIBRARY_PATH` (can check with `echo $LD_LIBRARY_PATH`) after entering the container. If it's not present, add it manually with `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./local/lib`. There is also no need to source `/opt/detector/setup.sh`, as was listed in previous readme.
 
 ## Editing the simulation
 By default, the simulation includes the HCal insert (W/Sc + Steel/Sc), ECal insert (homogeneous W/ScFi material), HCal (ATHENA: 20/3 mm Steel/Sc), ECal (homogeneous W/ScFi material), and the beampipe. To change what detectors are simulated, simply comment out the undesired ones in `endcapP_insert.xml`.
