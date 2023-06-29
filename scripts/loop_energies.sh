@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Use eithr run_sim_hepmc or run_sim_gps
-simulation="run_sim_hepmc"
+# Use either run_sim_hepmc or run_sim_gps
+simulation_script="run_sim_hepmc.sh"
 energies=(1 2 5 10 20 30 40 50 60 70 80 90 100)
 
 for energy in "${energies[@]}"
 do
-	sed -i "s/beam_energy=.*/beam_energy=${energy}/" ${simulation}
+	sed -i "s/beam_energy=.*/beam_energy=${energy}/" ${SCRIPTS_PATH}/${simulation_script}
 	echo "Starting energy ${energy} GeV"
-	time ./${simulation}
+	time source ${SCRIPTS_PATH}/${simulation_script}
 done

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Input simulation parameters
-particle="e-"
-beam_energy=100
+particle="pi-"
+beam_energy=10
 num_events=1000
 
 # Output file names
@@ -13,4 +13,4 @@ recofile="insert_reco_${info_string}.edm4hep.root"
 
 # Run reconstruction
 export JUGGLER_SIM_FILE=${simfile} JUGGLER_REC_FILE=${recofile} JUGGLER_N_EVENTS=${num_events}
-gaudirun.py endcapP_insert_reco.py
+gaudirun.py ${SCRIPTS_PATH}/endcapP_insert_reco.py
