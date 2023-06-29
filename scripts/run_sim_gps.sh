@@ -1,5 +1,14 @@
 #!/bin/bash
 
+function print_the_help {
+  echo "USAGE: ${0} -n <nevents> -part <particle> -p <momentum> "
+  echo "  OPTIONS: "
+  echo "    -n,--nevents     Number of events"
+  echo "    -part,--particle particle type"
+  echo "    -p, --momentum   particle momentum (GeV)"
+  exit
+}
+
 # Input simulation parameters
 particle="pi-"
 beam_energy=10
@@ -8,6 +17,24 @@ theta_low=177.17
 theta_high=177.17
 phi_low=0
 phi_high=360
+
+while [ True ]; do
+if [ "$1" = "--help" -o "$1" = "-h" ]; then
+   print_the_help
+   shift
+elif [ "$1" = "-part" -o "$1" = "--particle" ]; then
+   particle=$2
+   shift 2 # past argument
+elif [ "$1" = "-n" -o "$1" = "--nevents" ]; then
+   num_events=$2
+   shift 2 # past argument
+elif [ "$1" = "-p" -o "$1" = "--momentum" ]; then
+   beam_energy=$2
+   shift 2 # past argument
+else
+   break
+fi
+done
 
 gps_file="${SCRIPTS_PATH}/gps.mac"
 # Output file names
