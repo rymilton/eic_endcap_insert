@@ -11,8 +11,8 @@ from GaudiKernel.SystemOfUnits import MeV, GeV, mm, cm, mrad
 
 #detector_name = str(os.environ.get("JUGGLER_DETECTOR", "endcapP_insert"))
 #detector_path = str(os.environ.get("DETECTOR_PATH", "."))
-detector_name = "endcapP_insert"
-detector_path = "."
+detector_name = "${DETECTOR}"
+detector_path = "${DETECTOR_PATH}"
 compact_path = os.path.join(detector_path, detector_name)
 
 # input arguments from calibration file
