@@ -20,15 +20,15 @@ target_link_libraries(${PROJECT_NAME}
 
 #-----------------------------------------------------------------------------------
 # Moving compact, scripts, and hepmc_generation to install share directory
-install(DIRECTORY compact scripts hepmc_generation ip6
+INSTALL(DIRECTORY compact scripts hepmc_generation ip6
     DESTINATION share/${PROJECT_NAME}
     FILE_PERMISSIONS OWNER_READ OWNER_EXECUTE OWNER_WRITE
     )
-# Moving main XML file to install share directory
+# Moving setup script to $EIC_SHELL_PREFIX
 INSTALL(FILES insert_setup.sh
     DESTINATION .
     )
-# Moving main XML file to install share directory
-INSTALL(FILES endcapP_insert.xml
-    DESTINATION share/${PROJECT_NAME}
-    )
+# Moving XML files to install share directory
+INSTALL(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/xml/
+        DESTINATION "share/${PROJECT_NAME}" 
+        FILES_MATCHING PATTERN "*.xml" )
