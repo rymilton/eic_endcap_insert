@@ -42,7 +42,7 @@
       readout="ZDCHcalHits">
       <position x="ZDCHcal_x_pos" y="ZDCHcal_y_pos" z="ZDCHcal_z_pos"/>
       <rotation x="ZDCHcal_rotateX_angle" y="ZDCHcal_rotateY_angle" z="ZDCHcal_rotateZ_angle"/>
-      <comment> HCal has 50 layers + 1 layer of just absorber </comment>
+      <comment> ZDC HCal has 59 layers + 1 layer of just absorber </comment>
       <dimensions
         x="ZDCHcal_width"
         y="ZDCHcal_height"
