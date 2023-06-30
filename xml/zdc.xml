@@ -13,7 +13,14 @@
   <display>
   <include ref="compact/colors.xml" />
   </display>
-  
+
+  <documentation level="0">
+    ## World Volume
+    The world is a simple box, but could be a union of multiple regions.
+  </documentation>
+  <world material="Air">
+    <shape type="Box" dx="world_x" dy="world_y" dz="world_z"/>
+  </world>
 
   <comment> Including the ZDC </comment>
   <include ref="compact/zdc/zdc_hcal.xml"/>

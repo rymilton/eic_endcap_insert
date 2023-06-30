@@ -10,16 +10,18 @@
     <gdmlFile ref="compact/materials.xml"/>
   </includes>
 
-  <limits>
-  </limits>
-
-  <regions>
-  </regions>
-
   <display>
   <include ref="compact/colors.xml" />
   </display>
   
+  <documentation level="0">
+    ## World Volume
+    The world is a simple box, but could be a union of multiple regions.
+  </documentation>
+  <world material="Air">
+    <shape type="Box" dx="world_x" dy="world_y" dz="world_z"/>
+  </world>
+
   <comment> Including the central beampipe </comment>
   <include ref="ip6/central_beampipe.xml" />
 
@@ -32,18 +34,5 @@
 
   <comment> Including the forward HCal </comment>
   <comment> Change to compact/hcal/hcal_forward_ECCE.xml for ECCE pHCal</comment>
-  <include ref="compact/hcal/hcal_forward_ECCE.xml"/>
-
-  <detectors>
-  </detectors>
-
-  <readouts>
-  </readouts>
-
-  <plugins>
-  </plugins>
-
-  <fields>
-  </fields>
-
+  <include ref="compact/hcal/hcal_forward_ATHENA.xml"/>
 </lccdd>
