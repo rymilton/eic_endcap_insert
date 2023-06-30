@@ -29,12 +29,14 @@ cd ..
 Make sure IP6 and this repository have the same install prefix.
 
 ## Editing the simulation
-By default, the simulation includes the HCal insert (W/Sc + Steel/Sc), ECal insert (homogeneous W/ScFi material), HCal (ATHENA: 20/3 mm Steel/Sc), ECal (homogeneous W/ScFi material), and the beampipe. To change what detectors are simulated, simply comment out the undesired ones in `xml/endcapP_insert.xml`.
+By default, the endcap simulation includes the HCal insert (W/Sc + Steel/Sc), ECal insert (homogeneous W/ScFi material), HCal (ATHENA: 20/3 mm Steel/Sc), ECal (homogeneous W/ScFi material), and the beampipe. To change what detectors are simulated, simply comment out the undesired ones in `xml/endcapP_insert.xml`.
 
-Some simple parameters for the geometry are contained in `compact/configuration_default.xml`. If you want to simulate without a beampipe and hole, replace `<include ref="compact/configuration_default.xml"/>` with `<include ref="compact/configuration_nohole.xml"/>` and comment out `<include ref="ip6/central_beampipe.xml"/>` in `xml/endcapP_insert.xml`.
+Some simple parameters for the geometry are contained in `compact/configuration_default.xml`. If you want to simulate the endcap without a beampipe and hole, replace `<include ref="compact/configuration_default.xml"/>` with `<include ref="compact/configuration_nohole.xml"/>` and comment out `<include ref="ip6/central_beampipe.xml"/>` in `xml/endcapP_insert.xml`.
+
+There is also a ZDC geometry in `xml/zdc.xml`.
 
 #### NOTE: If you adjust any files, you need to `make install` in your build directory before running the simulation.
-#### NOTE: If you remove any detector components from the simulation, you must also comment out the related lines in `scripts/endcapP_insert_reco.py` and re-install.
+#### NOTE: If you remove any detector components from the endcapP_insert simulation, you must also comment out the related lines in `scripts/endcapP_insert_reco.py` and re-install.
 
 
 ## Running the simulation
@@ -45,7 +47,7 @@ source $EIC_SHELL_PREFIX/insert_setup.sh
 This will create some simple environment variables used in the scripts. The `DETECTOR` variable in the script should correlate to the XML file you want to use. 
 ### You must source this script every time you enter the EIC container.
 
-`scripts/run_sim_hepmc.sh` generates a HepMC file and feeds it to npsim and DD4hep. The resulting sim file is then sent through Juggler for digitization and reconstruction. The sim and reco files are saved. 
+`scripts/run_sim_hepmc.sh` generates a HepMC file and feeds it to npsim and DD4hep. The resulting sim file is then sent through Juggler for digitization and reconstruction. The sim and reco files are saved. There are separate reconstruction scripts for the endcapP_insert and zdc geometries. Make sure your `$DETECTOR` variable is correct in in `$EIC_SHELL_PREFIX/insert_setup.sh` to use the correct script.
 
 Some basic, adjustable paramaters are listed at the top of `scripts/run_sim_hepmc.sh`. There are also in-line options to choose the particle (`-part` or `--particle`), particle momentum/energy (`-p` or `--momentum`), and the number of events to be simulated (`-n` or `--nevents`). There is also a help option (`-h` or `--help`).
 
