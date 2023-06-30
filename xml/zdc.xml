@@ -1,0 +1,21 @@
+<lccdd>
+  <define>
+    <include ref="ip6/definitions.xml" /> 
+    <include ref="compact/definitions.xml" />
+    <include ref="compact/configuration_default.xml"/>
+  </define>
+
+  <includes>
+    <gdmlFile ref="compact/elements.xml"/>
+    <gdmlFile ref="compact/materials.xml"/>
+  </includes>
+
+  <display>
+  <include ref="compact/colors.xml" />
+  </display>
+  
+
+  <comment> Including the ZDC </comment>
+  <include ref="compact/zdc/zdc_hcal.xml"/>
+
+</lccdd>

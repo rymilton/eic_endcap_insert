@@ -1,0 +1,75 @@
+<lccdd>
+
+  <info name="zdc_hcal.xml"
+        title="ZDC HCal"
+        author="@rymilton"
+        url="https://github.com/rymilton"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+
+    <documentation>
+      #### ZDC Thicknesses 
+    </documentation>
+    <constant name="ZDCHcalAbsorberThickness"      value="2.0 * cm"/>
+    <constant name="ZDCHcalScintillatorThickness"  value="0.3 * cm"/>
+
+    <documentation>
+      - ZDC Hcal N Layers and computed Thickness
+    </documentation>
+    <constant name="ZDCHcalSingleLayerThickness" 
+      value="ZDCHcalAbsorberThickness +
+             ZDCHcalScintillatorThickness"
+    />
+
+    <constant name="ZDCHcalBackplateThickness" value="ZDCHcalAbsorberThickness"/>
+
+  </define>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### ZDC Hadronic Calorimeter
+      
+      59 layers of 2/0.3 cm Steel/Sc with steel backplate
+    </documentation>
+    <detector 
+      id="ZDCHcal_ID" 
+      name="ZDCHcal" 
+      type="ZDC_Hcal" 
+      readout="ZDCHcalHits">
+      <position x="ZDCHcal_x_pos" y="ZDCHcal_y_pos" z="ZDCHcal_z_pos"/>
+      <rotation x="ZDCHcal_rotateX_angle" y="ZDCHcal_rotateY_angle" z="ZDCHcal_rotateZ_angle"/>
+      <comment> HCal has 50 layers + 1 layer of just absorber </comment>
+      <dimensions
+        x="ZDCHcal_width"
+        y="ZDCHcal_height"
+        z="ZDCHcalSingleLayerThickness * ZDCHcal_numLayers +
+           ZDCHcalBackplateThickness" 
+      />
+      <layer repeat="ZDCHcal_numLayers" thickness = "ZDCHcalSingleLayerThickness">
+        <slice name="Absorber_slice" material="Steel235" thickness="ZDCHcalAbsorberThickness" vis="AnlLight_Gray"/>
+        <slice name="Scintillator_slice" material="PlasticScint126" thickness="ZDCHcalScintillatorThickness" vis="AnlOrange" sensitive="yes"/>
+      </layer>
+      <comment> Final layer of steel </comment>
+      <layer repeat="1" thickness = "ZDCHcalBackplateThickness">
+        <slice name="Absorber_slice" material="Steel235" thickness="ZDCHcalBackplateThickness" vis="AnlLight_Gray"/>
+      </layer>
+    </detector>
+
+  </detectors>
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="ZDCHcalHits">
+      <segmentation 
+        type="CartesianGridXY" 
+        grid_size_x="5.0 * cm" 
+        grid_size_y="5.0 * cm"
+      />
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>
