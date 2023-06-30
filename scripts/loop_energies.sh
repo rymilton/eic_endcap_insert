@@ -1,11 +1,10 @@
 #!/bin/bash
 
 function print_the_help {
-  echo "USAGE: ${0} -n <nevents> -part <particle> -p <momentum> "
+  echo "USAGE: ${0} -n <nevents> -part <particle> "
   echo "  OPTIONS: "
   echo "    -n,--nevents     Number of events"
   echo "    -part,--particle particle type"
-  echo "    -p, --momentum   particle momentum (GeV)"
   exit
 }
 
