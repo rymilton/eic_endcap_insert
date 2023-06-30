@@ -45,7 +45,7 @@ done
 
 # Output file names
 info_string="${particle}_${beam_energy}GeV_theta_${theta_min}deg_thru_${theta_max}deg"
-simfile="insert_sim_${info_string}.root"
+simfile="insert_sim_${info_string}.edm4hep.root"
 recofile="insert_reco_${info_string}.edm4hep.root"
 
 # Run reconstruction
