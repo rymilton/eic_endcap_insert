@@ -38,7 +38,7 @@ fi
 done
 
 # Output file names
-info_string="${particle}_${beam_energy}GeV_theta_${theta}deg"
+info_string="${particle}_${beam_energy}GeV_theta_${theta_min}deg_thru_${theta_max}deg"
 hepmcfile="gen_${info_string}.hepmc"
 simfile="insert_sim_${info_string}.edm4hep.root"
 recofile="insert_reco_${info_string}.edm4hep.root"
