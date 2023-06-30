@@ -9,26 +9,11 @@ import ROOT
 from Configurables import ApplicationMgr, EICDataSvc, PodioInput, PodioOutput, GeoSvc
 from GaudiKernel.SystemOfUnits import MeV, GeV, mm, cm, mrad
 
-#detector_name = str(os.environ.get("JUGGLER_DETECTOR", "endcapP_insert"))
-#detector_path = str(os.environ.get("DETECTOR_PATH", "."))
 detector_name = "${DETECTOR}"
 detector_path = "${DETECTOR_PATH}"
 compact_path = os.path.join(detector_path, detector_name)
 
-# input arguments from calibration file
-#with open(f'{detector_path}/calibrations/emcal_barrel_calibration.json') as f:
-    #calib_data = json.load(f)['electron']
-
-#print(calib_data)
-
-#cb_ecal_sf = float(calib_data['sampling_fraction_img'])
-#scifi_barrel_sf = float(calib_data['sampling_fraction_scfi'])
-
 # get sampling fractions from system environment variable, 1.0 by default
-#ci_ecal_sf = float(os.environ.get("CI_ECAL_SAMP_FRAC", 0.253))
-#cb_hcal_sf = float(os.environ.get("CB_HCAL_SAMP_FRAC", 0.038))
-#ci_hcal_sf = float(os.environ.get("CI_HCAL_SAMP_FRAC", 0.025))
-#ce_hcal_sf = float(os.environ.get("CE_HCAL_SAMP_FRAC", 0.025))
 ci_hcal_sf = "1."
 ci_hcal_insert_sf = "1."
 ci_ecal_sf = "0.03"
@@ -48,14 +33,6 @@ podioevent = EICDataSvc("EventDataSvc", inputs=input_sims)
 # juggler components
 from Configurables import Jug__Digi__CalorimeterHitDigi as CalHitDigi
 from Configurables import Jug__Reco__CalorimeterHitReco as CalHitReco
-# from Configurables import Jug__Reco__CalorimeterHitsMerger as CalHitsMerger
-# from Configurables import Jug__Reco__CalorimeterIslandCluster as IslandCluster
-
-# from Configurables import Jug__Reco__ImagingPixelReco as ImCalPixelReco
-# from Configurables import Jug__Reco__ImagingTopoCluster as ImagingCluster
-
-# from Configurables import Jug__Reco__ClusterRecoCoG as RecoCoG
-# from Configurables import Jug__Reco__ImagingClusterReco as ImagingClusterReco
 
 from Configurables import Jug__Fast__InclusiveKinematicsTruth as InclusiveKinematicsTruth
 
