@@ -45,8 +45,8 @@ done
 
 # Output file names
 info_string="${particle}_${beam_energy}GeV_theta_${theta_min}deg_thru_${theta_max}deg"
-simfile="insert_sim_${info_string}.edm4hep.root"
-recofile="insert_reco_${info_string}.edm4hep.root"
+simfile="${DETECTOR}_sim_${info_string}.edm4hep.root"
+recofile="${DETECTOR}_reco_${info_string}.edm4hep.root"
 
 # Run reconstruction
 export JUGGLER_SIM_FILE=${simfile} JUGGLER_REC_FILE=${recofile} JUGGLER_N_EVENTS=${num_events}

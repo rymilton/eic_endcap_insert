@@ -48,8 +48,8 @@ done
 gps_file="${SCRIPTS_PATH}/gps.mac"
 # Output file names
 info_string="${particle}_${beam_energy}GeV_theta_${theta_low}deg_${theta_high}deg"
-simfile="insert_sim_${info_string}.edm4hep.root"
-recofile="insert_reco_${info_string}.edm4hep.root"
+simfile="${DETECTOR}_sim_${info_string}.edm4hep.root"
+recofile="${DETECTOR}_reco_${info_string}.edm4hep.root"
 
 # Putting parameters into gps file
 sed -i "s/\/gps\/particle .*/\/gps\/particle ${particle}/" $gps_file

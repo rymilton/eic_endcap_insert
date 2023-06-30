@@ -49,8 +49,8 @@ done
 # Output file names
 info_string="${particle}_${beam_energy}GeV_theta_${theta_min}deg_thru_${theta_max}deg"
 hepmcfile="gen_${info_string}.hepmc"
-simfile="insert_sim_${info_string}.edm4hep.root"
-recofile="insert_reco_${info_string}.edm4hep.root"
+simfile="${DETECTOR}_sim_${info_string}.edm4hep.root"
+recofile="${DETECTOR}_reco_${info_string}.edm4hep.root"
 
 # Generating hepmc file
 root -l -b -q "${DETECTOR_PATH}/hepmc_generation/gen_particles.cxx(\
