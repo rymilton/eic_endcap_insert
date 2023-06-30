@@ -31,4 +31,14 @@
     <constant name="EcalEndcapP_rmin"                         value="0*cm"/>
     <constant name="EcalEndcapP_rmax"                         value="190*cm"/>
     <constant name="EcalEndcapP_numLayers"                    value="1"/>
+
+    <constant name="ZDCHcal_z_pos"         value="3560.0 * cm"/>
+    <constant name="ZDCHcal_x_pos"         value="ZDCHcal_z_pos * ionCrossingAngle"/>
+    <constant name="ZDCHcal_y_pos"         value="0.0 * cm"/>
+    <constant name="ZDCHcal_rotateX_angle" value="0.0 * rad"/>
+    <constant name="ZDCHcal_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="ZDCHcal_rotateZ_angle" value="0.0 * rad"/>
+    <constant name="ZDCHcal_width"         value="60.0 * cm"/>
+    <constant name="ZDCHcal_height"         value="60.0 * cm"/>
+    <constant name="ZDCHcal_numLayers"     value="59"/>
   </define>

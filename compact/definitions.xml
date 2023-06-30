@@ -188,12 +188,13 @@ The unused IDs below are saved for future use.
 
       - Unused IDs: 115-119
     </documentation>
-    <constant name="HCalSubAssembly_ID" value="110"/>
-    <constant name="HCalBarrel_ID"      value="111"/>
-    <constant name="HCalEndcapP_ID"     value="112"/>
-    <constant name="HCalEndcapN_ID"     value="113"/>
+    <constant name="HCalSubAssembly_ID"         value="110"/>
+    <constant name="HCalBarrel_ID"              value="111"/>
+    <constant name="HCalEndcapP_ID"             value="112"/>
+    <constant name="HCalEndcapN_ID"             value="113"/>
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
-    <constant name="HCalEndcapPInsert_ID"     value="115"/>
+    <constant name="HCalEndcapPInsert_ID"       value="115"/>
+    <constant name="ZDCHcal_ID"                 value="116"/>
 
     <documentation> 
       #### (120-129) (near) Forward reserved
